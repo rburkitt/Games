@@ -1,0 +1,64 @@
+﻿@page "/wordsearch"
+
+@using System.Collections.Generic;
+
+@code {
+    private List<string> wordList = new List<string> { "cow", "chicken", "horse", "dog", "sheep", "lamb", "cat" };
+    private wordSearch theGameW;
+    private bool IsShow { get; set; } = true;
+
+    protected override void OnInitialized()
+    {
+        theGameW = new wordSearch(wordList, 10, 10);
+    }
+
+    public void Solve()
+    {
+        IsShow = !IsShow;
+    }
+}
+
+<h3>Word Search</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <table>
+                <tr><th><u>Find:</u></th></tr>
+                @foreach (string print in theGameW.found)
+                {
+                    <tr><td>@print</td></tr>
+                }
+            </table>            
+        </div>
+        <div class="col-5">
+            <table>
+                @for (int r = 0; r < theGameW.puzzle.GetLength(0); r++)//print puzzle
+                {
+                    <tr>
+                        @for (int c = 0; c < theGameW.puzzle.GetLength(1); c++)
+                        {
+                            <td style="width: 25px; text-align: center;">@theGameW.puzzle[r, c]</td>
+                        }
+                    </tr>
+                }
+            </table>
+            <button type="button" class="btn btn-link" @onclick="@Solve">Solution</button>            
+        </div>
+        <div class="col-5">
+            <div hidden="@IsShow">
+                <table>
+                    @for (int r = 0; r < theGameW.solution.GetLength(0); r++)//print solution
+                    {
+                        <tr>
+                            @for (int c = 0; c < theGameW.solution.GetLength(1); c++)
+                            {
+                                <td style="width: 25px; text-align: center;">@theGameW.solution[r, c]</td>
+                            }
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

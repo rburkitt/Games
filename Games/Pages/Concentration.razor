@@ -1,0 +1,189 @@
+﻿@page "/concentration"
+
+@using System
+@using System.Collections.Generic
+@using System.Linq
+
+@code {
+    public class Card
+    {
+        public string Value { get; set; }
+        public string Text { get; set; }
+        public bool IsEnabled { get; set; }
+    }
+
+    public List<Card> Cards = new List<Card>();
+
+    public List<string> faces = new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8" };
+
+    public Card Card1 { get; set; }
+    public Card Card2 { get; set; }
+
+    public int Flipped = 0;
+
+    protected override void OnInitialized()
+    {
+        faces.AddRange(faces);
+        DealCards();
+    }
+
+    public void DealCards()
+    {
+        Card1 = null;
+        Card2 = null;
+        Cards.Clear();
+        faces.OrderBy(a => Guid.NewGuid()).ToList().ForEach(o =>
+        {
+            Cards.Add(new Card
+                {
+                    Value = o,
+                    Text = "",
+                    IsEnabled = false
+                });
+        });
+        Flipped = 0;
+    }
+
+    public void flipCard(Card card)
+    {
+        if(card.Text == "")
+        {
+            card.Text = card.Value;
+
+            if(Card1 == null)
+            {
+                Card1 = card;
+            }
+            else if(Card2 == null && Card1 != card)
+            {
+                Card2 = card;
+
+            }
+            else if(Card1 != null && Card2 != null)
+            {
+                Card1.Text = "";
+                Card2.Text = "";
+                Card1 = card;
+                Card2 = null;
+            }
+
+            if(Card1 != null && Card2 != null)
+            {
+                if(Card1.Value == Card2.Value)
+                {
+                    Card1 = null;
+                    Card2 = null;
+
+                    Cards.Where(o => o.Text != "")
+                    .GroupBy(x => x.Text)
+                    .Where(o => o.Count() > 1).ToList()
+                    .ForEach(o =>
+                    {
+                        o.ToList().ForEach(c => c.IsEnabled = true);
+                    });
+                }
+                Flipped++;
+            }
+        }
+    }
+}
+
+    <div class="gameContainer">
+        <div id="stack">
+            @foreach (var card in Cards)
+            {
+            <button disabled="@(card.IsEnabled)" @onclick="(e => flipCard(card))">
+                <div style="display: flex; align-items: center; justify-content: center;">@card.Text</div>
+            </button>
+}
+        </div>
+
+        <div class="bottom-bar">
+            <div class="score">
+                Flipped: @Flipped
+            </div>
+            <div class="deal">
+                <button @onclick="@DealCards">&#8635</button>
+            </div>
+        </div>
+    </div>
+    <style>
+    /*body {
+        background: linear-gradient(180deg, rgb(5, 39, 103) 0%, rgb(58, 6, 71) 70%) fixed;
+        color: white;
+    }*/
+
+    .gameContainer {
+        padding: 15px;
+        width: 250px;
+        margin: auto;
+    }
+
+    .score {
+        color: black;
+        float: left;
+    }
+
+    .deal {
+        color: black;
+        float: right;
+    }
+
+    .deal button {
+        background-color: transparent;
+        text-align: center;
+        vertical-align: middle;
+        display: inline-flex;
+        justify-content: center;
+        border: 1px solid black;
+        color: black;
+
+        padding: .25rem .5rem;
+        font-size: .875rem;
+        line-height: 1.5;
+        border-radius: .2rem;
+    }
+
+    #stack {
+        align-content: center;
+        width: 100%;
+        margin: auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 5px;
+        padding: 5px;
+    }
+
+    .bottom-bar {
+        align-content: center;
+        width: 100%;
+        margin: auto;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-gap: 20px;
+        padding: 20px;
+    }
+
+    #stack button {
+        background-color: transparent;
+        width: 60px;
+        height: 80px;
+        font-size: 30px;
+        text-align: center;
+        vertical-align: middle;
+        display: inline-flex;
+        justify-content: center;
+        border: 1px solid black;
+        color: black;
+        border-radius: .2rem;
+    }
+
+    #stack button:disabled,
+    #stack button[disabled] {
+        border: 1px solid #999999;
+        background-color: #cccccc;
+        color: #666666;
+    }
+
+  </style>
+

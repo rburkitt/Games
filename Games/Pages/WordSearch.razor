@@ -5,7 +5,8 @@
 @code {
     private List<string> wordList = new List<string> { "cow", "chicken", "horse", "dog", "sheep", "lamb", "cat" };
     private wordSearch theGameW;
-    private bool IsShow { get; set; } = true;
+    private bool HidePuzzle { get; set; } = false;
+    private bool HideSolution { get; set; } = true;
 
     protected override void OnInitialized()
     {
@@ -14,7 +15,8 @@
 
     public void Solve()
     {
-        IsShow = !IsShow;
+        HidePuzzle = !HidePuzzle;
+        HideSolution = !HideSolution;
     }
 }
 
@@ -29,9 +31,10 @@
                 {
                     <tr><td>@print</td></tr>
                 }
-            </table>            
+            </table> 
+            <button type="button" class="btn btn-link" style="padding: 0px;%;" @onclick="@Solve">Solution &rArr;</button> 
         </div>
-        <div class="col-5">
+        <div class="col-10" hidden="@HidePuzzle">
             <table>
                 @for (int r = 0; r < theGameW.puzzle.GetLength(0); r++)//print puzzle
                 {
@@ -42,23 +45,20 @@
                         }
                     </tr>
                 }
-            </table>
-            <button type="button" class="btn btn-link" @onclick="@Solve">Solution</button>            
+            </table>                       
         </div>
-        <div class="col-5">
-            <div hidden="@IsShow">
-                <table>
-                    @for (int r = 0; r < theGameW.solution.GetLength(0); r++)//print solution
-                    {
-                        <tr>
-                            @for (int c = 0; c < theGameW.solution.GetLength(1); c++)
-                            {
-                                <td style="width: 25px; text-align: center;">@theGameW.solution[r, c]</td>
-                            }
-                        </tr>
-                    }
-                </table>
-            </div>
+        <div class="col-10" hidden="@HideSolution">
+            <table>
+                @for (int r = 0; r < theGameW.solution.GetLength(0); r++)//print solution
+                {
+                    <tr>
+                        @for (int c = 0; c < theGameW.solution.GetLength(1); c++)
+                        {
+                            <td style="width: 25px; text-align: center;">@theGameW.solution[r, c]</td>
+                        }
+                    </tr>
+                }
+            </table>
         </div>
     </div>
 </div>

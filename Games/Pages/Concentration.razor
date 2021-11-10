@@ -169,13 +169,20 @@
         width: 60px;
         height: 80px;
         font-size: 30px;
-        text-align: center;
-        vertical-align: middle;
-        display: inline-flex;
-        justify-content: center;
         border: 1px solid black;
         color: black;
         border-radius: .2rem;
+    }
+
+    @@media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0) {
+        @@media {
+            #stack button {
+                text-align: center;
+                vertical-align: middle;
+                display: inline-flex;
+                justify-content: center;
+            }
+        }
     }
 
     #stack button:disabled,

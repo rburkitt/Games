@@ -33,11 +33,11 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-\/SNTkpofjZ7FYASsidq0iqKTFAYLpy3vOx7Wd0mRqA4=",
+      "hash": "sha256-ShqS\/\/x0AkA1WsSvZKr3KMs89d1I429L1LhQTouuqAI=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-9r27GPW9RfGat57Hf2h4gao27qK6pFpymrLoSm44clY=",
+      "hash": "sha256-CtsK3+aizXBfCjINlFVYGxfpapZI3E3fHQ8kdnUhSsQ=",
       "url": "_framework\/Games.dll"
     },
     {
@@ -225,5 +225,5 @@
       "url": "manifest.json"
     }
   ],
-  "version": "j3x58f7O"
+  "version": "XBDH0j1h"
 };

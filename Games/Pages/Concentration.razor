@@ -89,6 +89,7 @@
 }
 
     <div class="gameContainer">
+        <h3>Concentration</h3>
         <div id="stack">
             @foreach (var card in Cards)
             {
@@ -108,10 +109,12 @@
         </div>
     </div>
     <style>
-    /*body {
-        background: linear-gradient(180deg, rgb(5, 39, 103) 0%, rgb(58, 6, 71) 70%) fixed;
-        color: white;
-    }*/
+
+    .gameContainer h3 {
+        text-align: center;
+        vertical-align: middle;
+        justify-content: center;
+    }
 
     .gameContainer {
         padding: 15px;

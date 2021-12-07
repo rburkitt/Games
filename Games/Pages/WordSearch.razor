@@ -10,6 +10,11 @@
 
     protected override void OnInitialized()
     {
+        Setup();
+    }
+
+    public void Setup()
+    {
         theGameW = new wordSearch(wordList, 10, 10);
     }
 
@@ -61,4 +66,31 @@
             </table>
         </div>
     </div>
+    <div class="row">
+        <div class="col setup">
+            <button @onclick="@Setup">&#8635</button>
+        </div>
+    </div>
 </div>
+
+<style>
+    .setup {
+        color: black;
+        float: right;
+    }
+
+    .setup button {
+        background-color: transparent;
+        text-align: center;
+        vertical-align: middle;
+        display: inline-flex;
+        justify-content: center;
+        border: 1px solid black;
+        color: black;
+
+        padding: .25rem .5rem;
+        font-size: .875rem;
+        line-height: 1.5;
+        border-radius: .2rem;
+    }
+</style>

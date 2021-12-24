@@ -3,7 +3,7 @@
 @using System.Collections.Generic;
 
 @code {
-    private List<string> wordList = new List<string> { "cow", "chicken", "horse", "dog", "sheep", "lamb", "cat" };
+    private List<string> wordList = new List<string> { "cow", "chicken", "horse", "dog", "sheep", "lamb", "cat", "pig", "ox", "goose", "mouse", "goat", "duck" };
     private wordSearch theGameW;
     private bool HidePuzzle { get; set; } = false;
     private bool HideSolution { get; set; } = true;
@@ -18,7 +18,7 @@
         HidePuzzle = false;
         HideSolution = true;
 
-        theGameW = new wordSearch(wordList, 10, 10);
+        theGameW = new wordSearch(wordList.OrderBy(o => System.Guid.NewGuid().ToString()).ToList(), 10, 10);
     }
 
     public void Solve()

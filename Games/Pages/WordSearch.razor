@@ -3,10 +3,13 @@
 @using System.Collections.Generic;
 
 @code {
-    private List<string> wordList = new List<string> { "cow", "chicken", "horse", "dog", "sheep", "lamb", "cat", "pig", "ox", "goose", "mouse", "goat", "duck" };
+    private List<string> wordList = new List<string> { "cow", "chicken", "horse", "dog", "sheep", "lamb", "cat", "pig", "goose", "mouse", "goat", "duck" };
     private wordSearch theGameW;
     private bool HidePuzzle { get; set; } = false;
     private bool HideSolution { get; set; } = true;
+    private string[,] bgColor = new string[10, 10];
+    private string[] finds;
+    private int find = 0;
 
     protected override void OnInitialized()
     {
@@ -19,12 +22,51 @@
         HideSolution = true;
 
         theGameW = new wordSearch(wordList.OrderBy(o => System.Guid.NewGuid().ToString()).ToList(), 10, 10);
+
+        for (int r = 0; r < bgColor.GetLength(0); r++)
+        {
+            for (int c = 0; c < bgColor.GetLength(1); c++)
+            {
+                bgColor[r, c] = "00f";
+            }
+        }
+
+        finds = new string[theGameW.found.Count];
+        for(int i = 0; i < theGameW.found.Count; i++)
+        {
+            finds[i] = "";
+
+        }
     }
 
     public void Solve()
     {
         HidePuzzle = !HidePuzzle;
         HideSolution = !HideSolution;
+    }
+
+    public void Highlight(int r, int c)
+    {
+        if(bgColor[r,c] == "00f")
+        {
+            bgColor[r, c] = "#fd7";
+        }
+        else
+        {
+            bgColor[r, c] = "00f";
+        }
+    }
+
+    public void CrossOut(int index)
+    {
+        if (finds[index] == "")
+        {
+            finds[index] = "line-through";
+        }
+        else
+        {
+            finds[index] = "";
+        }
     }
 }
 
@@ -35,9 +77,11 @@
         <div class="col">
             <table>
                 <tr><th><u>Find:</u></th></tr>
-                @foreach (string print in theGameW.found)
+                @for(int find = 0; find < theGameW.found.Count; find++)
                 {
-                    <tr><td>@print</td></tr>
+                    string print = theGameW.found[find];
+                    var local_find = find;
+                    <tr><td style="text-decoration: @finds[find];" @onclick="(e => CrossOut(local_find))">@print</td></tr>
                 }
             </table> 
             <button type="button" class="btn btn-link" style="padding: 0px;%;" @onclick="@Solve">Solution &rArr;</button> 
@@ -46,10 +90,12 @@
             <table>
                 @for (int r = 0; r < theGameW.puzzle.GetLength(0); r++)//print puzzle
                 {
+                    var local_r = r;
                     <tr>
                         @for (int c = 0; c < theGameW.puzzle.GetLength(1); c++)
                         {
-                            <td style="width: 25px; text-align: center;">@theGameW.puzzle[r, c]</td>
+                            var local_c = c;
+                            <td style="width: 25px; text-align: center;background-color:@bgColor[r,c]" @onclick="(e => Highlight(local_r, local_c))">@theGameW.puzzle[r, c]</td>
                         }
                     </tr>
                 }

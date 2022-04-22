@@ -84,7 +84,7 @@
                     <tr><td style="text-decoration: @finds[find];" @onclick="(e => CrossOut(local_find))">@print</td></tr>
                 }
             </table> 
-            <button type="button" class="btn btn-link" style="padding: 0px;%;" @onclick="@Solve">Solution &rArr;</button> 
+            <button type="button" class="btn btn-link" style="padding: 0px;%; margin-bottom: 10px;" @onclick="@Solve">Solution &rArr;</button> 
         </div>
         <div class="col-10" hidden="@HidePuzzle">
             <table>
@@ -117,7 +117,7 @@
     </div>
     <div class="row">
         <div class="col setup">
-            <button @onclick="@Setup">&#8635</button>
+            <button style="margin-top: 10px;" @onclick="@Setup">&#8635</button>
         </div>
     </div>
 </div>

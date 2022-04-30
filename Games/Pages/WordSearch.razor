@@ -81,40 +81,49 @@
         <div class="col">
             <table>
                 <tr><th><u>Find:</u></th></tr>
-                @for(int find = 0; find < theGameW.found.Count; find++)
+                @if (theGameW != null)
                 {
-                    string print = theGameW.found[find];
-                    var local_find = find;
-                    <tr><td style="text-decoration: @finds[find];" @onclick="(e => CrossOut(local_find))">@print</td></tr>
+                    for (int find = 0; find < theGameW.found.Count; find++)
+                    {
+                        string print = theGameW.found[find];
+                        var local_find = find;
+                        <tr><td style="text-decoration: @finds[find];" @onclick="(e => CrossOut(local_find))">@print</td></tr>
+                    }
                 }
             </table> 
             <button type="button" class="btn btn-link" style="padding: 0px;%; margin-bottom: 10px;" @onclick="@Solve">Solution &rArr;</button> 
         </div>
         <div class="col-10" hidden="@HidePuzzle">
             <table>
-                @for (int r = 0; r < theGameW.puzzle.GetLength(0); r++)//print puzzle
+                @if (theGameW != null)
                 {
-                    var local_r = r;
-                    <tr>
-                        @for (int c = 0; c < theGameW.puzzle.GetLength(1); c++)
-                        {
-                            var local_c = c;
-                            <td style="width: 25px; text-align: center;background-color:@bgColor[r,c]" @onclick="(e => Highlight(local_r, local_c))">@theGameW.puzzle[r, c]</td>
-                        }
-                    </tr>
+                    for (int r = 0; r < theGameW.puzzle.GetLength(0); r++)//print puzzle
+                    {
+                        var local_r = r;
+                        <tr>
+                            @for (int c = 0; c < theGameW.puzzle.GetLength(1); c++)
+                            {
+                                var local_c = c;
+                                <td style="width: 25px; text-align: center;background-color:@bgColor[r,c]" @onclick="(e => Highlight(local_r, local_c))">@theGameW.puzzle[r, c]</td>
+                            }
+                        </tr>
+                    }
                 }
             </table>                       
         </div>
         <div class="col-10" hidden="@HideSolution">
             <table>
-                @for (int r = 0; r < theGameW.solution.GetLength(0); r++)//print solution
+                @if (theGameW != null)
                 {
-                    <tr>
-                        @for (int c = 0; c < theGameW.solution.GetLength(1); c++)
-                        {
-                            <td style="width: 25px; text-align: center;">@theGameW.solution[r, c]</td>
-                        }
-                    </tr>
+                    for (int r = 0; r < theGameW.solution.GetLength(0); r++)//print solution
+                    {
+                        <tr>
+                            @for (int c = 0; c < theGameW.solution.GetLength(1); c++)
+                            {
+                                <td style="width: 25px; text-align: center;">@theGameW.solution[r, c]</td>
+                            }
+                        </tr>
+                    }
                 }
             </table>
         </div>

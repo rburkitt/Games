@@ -3,13 +3,18 @@ using System.Collections.Generic;
 
 namespace Games.Pages
 {
+    public class Word
+    {
+        public string Text { get; set; }
+
+    }
     public class wordSearch
     {
         public string[,] puzzle;
         public List<string> found;
         public string[,] solution;
 
-        public wordSearch(List<string> theWords, int height = 10, int width = 10)
+        public wordSearch(List<Word> theWords, int height = 10, int width = 10)
         {
             Random rnd = new Random();
             found = new List<string>();
@@ -34,19 +39,19 @@ namespace Games.Pages
                 int dir = rnd.Next(0, 3);
                 int fwd = rnd.Next(0, 2);
 
-                while (fwd == 0 && (row + theWords[k].Length > puzzle.GetLength(0) || col + theWords[k].Length > puzzle.GetLength(1)) || fwd == 1 && (row - theWords[k].Length < 0 || col - theWords[k].Length < 0))//check for out of bounds
+                while (fwd == 0 && (row + theWords[k].Text.Length > puzzle.GetLength(0) || col + theWords[k].Text.Length > puzzle.GetLength(1)) || fwd == 1 && (row - theWords[k].Text.Length < 0 || col - theWords[k].Text.Length < 0))//check for out of bounds
                 {
                     row = rnd.Next(0, height);
                     col = rnd.Next(0, width);
                 }
 
-                if (Check(fwd, dir, row, col, theWords[k]))
+                if (Check(fwd, dir, row, col, theWords[k].Text))
                 {
-                    found.Add(theWords[k]);
-                    for (int m = 0; m < theWords[k].Length; m++)//add each word's characters
+                    found.Add(theWords[k].Text);
+                    for (int m = 0; m < theWords[k].Text.Length; m++)//add each word's characters
                     {
-                        puzzle[row, col] = theWords[k].Substring(m, 1);
-                        solution[row, col] = theWords[k].Substring(m, 1);
+                        puzzle[row, col] = theWords[k].Text.Substring(m, 1);
+                        solution[row, col] = theWords[k].Text.Substring(m, 1);
 
                         if (dir == 0)
                             Increment(fwd, ref row);

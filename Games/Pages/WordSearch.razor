@@ -1,9 +1,10 @@
 ﻿@page "/wordsearch"
+@inject HttpClient Http
 
 @using System.Collections.Generic;
 
 @code {
-    private List<string> wordList = new List<string> { "cow", "chicken", "horse", "dog", "sheep", "lamb", "cat", "pig", "goose", "mouse", "goat", "duck" };
+    private Word[] wordList;
     private wordSearch theGameW;
     private bool HidePuzzle { get; set; } = false;
     private bool HideSolution { get; set; } = true;
@@ -11,13 +12,16 @@
     private string[] finds;
     private int find = 0;
 
-    protected override void OnInitialized()
-    {
-        Setup();
+    protected override async Task OnInitializedAsync()
+    {        
+        await Setup();
     }
 
-    public void Setup()
+    public async Task Setup()
     {
+        Random rnd = new Random();
+        wordList = await Http.GetFromJsonAsync<Word[]>($"words{rnd.Next(1, 4)}.json");
+
         HidePuzzle = false;
         HideSolution = true;
 
@@ -67,7 +71,7 @@
         {
             finds[index] = "";
         }
-    }
+    }    
 }
 
 <h3>Word Search</h3>

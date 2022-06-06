@@ -1,0 +1,232 @@
+@page "/wordguess"
+@inject HttpClient Http
+@inject IJSRuntime js
+
+@using System.Collections.Generic;
+
+@code {
+    public enum Location
+    {
+        Yes = 0,
+        No = 1,
+        Contains = 2,
+        Empty = 3
+    }
+    public class Letter
+    {
+        public string Text {get; set;} = "";
+        public Location Location {get; set;} = Location.Empty;
+    }
+    public class Round
+    {
+        public Letter One {get; set;} = new Letter();
+        public Letter Two {get; set;} = new Letter();
+        public Letter Three {get; set;} = new Letter();
+        public Letter Four {get; set;} = new Letter();
+        public Letter Five {get; set;} = new Letter();
+        public int Score {get; set;} = 0;
+    }
+    public class Wordle
+    {
+        List<string> words = new List<string>{"SAUTE", "SAUCE", "DATES", "FROZE"};
+        public string Word {get; set;}= "";
+        public int Turn {get; set;} = 0;
+
+        public List<Round> Rounds = new List<Round>(){new Round(), new Round(), new Round(), new Round(), new Round()};
+
+        public Wordle()
+        {
+            Random rnd = new Random();
+            Word = words[rnd.Next(words.Count)];
+            Turn = 0;
+        }
+
+        public void Guess()
+        {
+            // increase turn
+            Turn++;
+
+            var test = Word.ToCharArray().Select(c => c.ToString()).ToArray();
+            
+            var currentRound = Rounds.Skip(Turn - 1).First();
+
+            if(currentRound.One.Text.ToUpper() == test[0])
+            {
+                currentRound.One.Location = Location.Yes;
+                currentRound.Score++;
+            }
+            else if(Word.Contains(currentRound.One.Text))
+                currentRound.One.Location = Location.Contains;
+            else
+            {
+                currentRound.One.Location = Location.No;
+            }
+                
+            if(currentRound.Two.Text.ToUpper() == test[1])
+            {
+                currentRound.Two.Location = Location.Yes;
+                currentRound.Score++;
+            }
+            else if(Word.Contains(currentRound.Two.Text))
+                currentRound.Two.Location = Location.Contains;
+            else
+            {
+                currentRound.Two.Location = Location.No;
+            }
+                
+            if(currentRound.Three.Text.ToUpper() == test[2])
+            {
+                currentRound.Three.Location = Location.Yes;
+                currentRound.Score++;
+            }
+            else if(Word.Contains(currentRound.Three.Text))
+                currentRound.Three.Location = Location.Contains;
+            else
+            {
+                currentRound.Three.Location = Location.No;
+            }
+                
+            if(currentRound.Four.Text.ToUpper() == test[3])
+            {
+                currentRound.Four.Location = Location.Yes;
+                currentRound.Score++;
+            }
+            else if(Word.Contains(currentRound.Four.Text))
+                currentRound.Four.Location = Location.Contains;
+            else
+            {
+                currentRound.Four.Location = Location.No;
+            }
+                
+            if(currentRound.Five.Text.ToUpper() == test[4])
+            {
+                currentRound.Five.Location = Location.Yes;
+                currentRound.Score++;
+            }
+            else if(Word.Contains(currentRound.Five.Text))
+                currentRound.Five.Location = Location.Contains;
+            else
+            {
+                currentRound.Five.Location = Location.No;
+            }
+        }
+    }
+
+    private Wordle game;
+
+    protected override async Task OnInitializedAsync()
+    {        
+        await Setup();
+    }
+
+    public async Task Setup()
+    {
+        game = new Wordle();
+    }  
+    
+    public async Task Guess()
+    {
+        game.Guess();
+    }
+
+    public string GetColor(Letter letter)
+    {
+        string retVal = "white";
+
+        if(string.IsNullOrEmpty(letter.Text))
+            return retVal;
+
+        if(letter.Location == Location.Yes)
+            retVal = "green";
+
+        if(letter.Location == Location.No)
+            retVal = "gray";
+
+        if(letter.Location == Location.Contains)
+            retVal = "orange";
+
+        return retVal;
+    }
+
+    public bool Disable(int turn)
+    {
+        int previous = (turn - 1) >= 0 ? (turn - 1) : 0;
+        return game.Turn == turn && game.Rounds[previous].Score != 5 ? false : true;
+    }
+
+    public string Finished()
+    {
+        int previous = (game.Turn - 1) >= 0 ? (game.Turn - 1) : 0;
+        return game.Turn > 5 || game.Rounds[previous].Score == 5 ? game.Word : string.Empty;
+    }
+
+    public async void TextChanged()
+    {
+        await Focus();
+    }
+
+    public async Task Focus()
+    {
+        await js.InvokeVoidAsync("jsfunction.focusNextElement");
+    }
+}
+
+<h3>Word Guess</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <table>
+                <tr>
+                    <td><input @bind="game.Rounds[0].One.Text" style="background-color: @GetColor(game.Rounds[0].One)" maxlength="1" disabled="@(Disable(0))" /></td>
+                    <td><input @bind="game.Rounds[0].Two.Text" style="background-color: @GetColor(game.Rounds[0].Two)" maxlength="1" disabled="@(Disable(0))" /></td>
+                    <td><input @bind="game.Rounds[0].Three.Text" style="background-color: @GetColor(game.Rounds[0].Three)" maxlength="1" disabled="@(Disable(0))" /></td>
+                    <td><input @bind="game.Rounds[0].Four.Text" style="background-color: @GetColor(game.Rounds[0].Four)" maxlength="1" disabled="@(Disable(0))" /></td>
+                    <td><input @bind="game.Rounds[0].Five.Text" style="background-color: @GetColor(game.Rounds[0].Five)" maxlength="1" disabled="@(Disable(0))" /></td>
+                </tr>
+                <tr>
+                    <td><input @bind="game.Rounds[1].One.Text" style="background-color: @GetColor(game.Rounds[1].One)" maxlength="1" disabled="@(Disable(1))" /></td>
+                    <td><input @bind="game.Rounds[1].Two.Text" style="background-color: @GetColor(game.Rounds[1].Two)" maxlength="1" disabled="@(Disable(1))" /></td>
+                    <td><input @bind="game.Rounds[1].Three.Text" style="background-color: @GetColor(game.Rounds[1].Three)" maxlength="1" disabled="@(Disable(1))" /></td>
+                    <td><input @bind="game.Rounds[1].Four.Text" style="background-color: @GetColor(game.Rounds[1].Four)" maxlength="1" disabled="@(Disable(1))" /></td>
+                    <td><input @bind="game.Rounds[1].Five.Text" style="background-color: @GetColor(game.Rounds[1].Five)" maxlength="1" disabled="@(Disable(1))" /></td>
+                </tr>
+                <tr>
+                    <td><input @bind="game.Rounds[2].One.Text" style="background-color: @GetColor(game.Rounds[2].One)" maxlength="1" disabled="@(Disable(2))" /></td>
+                    <td><input @bind="game.Rounds[2].Two.Text" style="background-color: @GetColor(game.Rounds[2].Two)" maxlength="1" disabled="@(Disable(2))" /></td>
+                    <td><input @bind="game.Rounds[2].Three.Text" style="background-color: @GetColor(game.Rounds[2].Three)" maxlength="1" disabled="@(Disable(2))" /></td>
+                    <td><input @bind="game.Rounds[2].Four.Text" style="background-color: @GetColor(game.Rounds[2].Four)" maxlength="1" disabled="@(Disable(2))" /></td>
+                    <td><input @bind="game.Rounds[2].Five.Text" style="background-color: @GetColor(game.Rounds[2].Five)" maxlength="1" disabled="@(Disable(2))" /></td>
+                </tr>
+                <tr>
+                    <td><input @bind="game.Rounds[3].One.Text" style="background-color: @GetColor(game.Rounds[3].One)" maxlength="1" disabled="@(Disable(3))" /></td>
+                    <td><input @bind="game.Rounds[3].Two.Text" style="background-color: @GetColor(game.Rounds[3].Two)" maxlength="1" disabled="@(Disable(3))" /></td>
+                    <td><input @bind="game.Rounds[3].Three.Text" style="background-color: @GetColor(game.Rounds[3].Three)" maxlength="1" disabled="@(Disable(3))" /></td>
+                    <td><input @bind="game.Rounds[3].Four.Text" style="background-color: @GetColor(game.Rounds[3].Four)" maxlength="1" disabled="@(Disable(3))" /></td>
+                    <td><input @bind="game.Rounds[3].Five.Text" style="background-color: @GetColor(game.Rounds[3].Five)" maxlength="1" disabled="@(Disable(3))" /></td>
+                </tr>
+                <tr>
+                    <td><input @bind="game.Rounds[4].One.Text" style="background-color: @GetColor(game.Rounds[4].One)" maxlength="1" disabled="@(Disable(4))" /></td>
+                    <td><input @bind="game.Rounds[4].Two.Text" style="background-color: @GetColor(game.Rounds[4].Two)" maxlength="1" disabled="@(Disable(4))" /></td>
+                    <td><input @bind="game.Rounds[4].Three.Text" style="background-color: @GetColor(game.Rounds[4].Three)" maxlength="1" disabled="@(Disable(4))" /></td>
+                    <td><input @bind="game.Rounds[4].Four.Text" style="background-color: @GetColor(game.Rounds[4].Four)" maxlength="1" disabled="@(Disable(4))" /></td>
+                    <td><input @bind="game.Rounds[4].Five.Text"  style="background-color: @GetColor(game.Rounds[4].Five)" maxlength="1" disabled="@(Disable(4))" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col setup">
+            <button style="margin-top: 10px;" @onclick="@Guess">Guess</button>
+            <button style="margin-top: 10px;" @onclick="@Setup">&#8635</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col setup">
+            <label>@(Finished())</label>
+        </div>
+    </div>
+</div>
+<style>
+    input { width: 40px; }
+</style>

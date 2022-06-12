@@ -1,6 +1,5 @@
 @page "/wordguess"
 @inject HttpClient Http
-@inject IJSRuntime js
 
 @using System.Collections.Generic;
 
@@ -28,25 +27,30 @@
     }
     public class Wordle
     {
-        List<string> words = new List<string>{"SAUTE", "SAUCE", "DATES", "FROZE", "PRINT", "MOUSE", "MOOSE", "HORSE"};
         public string Word {get; set;}= "";
         public int Turn {get; set;} = 0;
         public string GuessWord { get; set; } = "";
         public bool Finished { get; set; } = false;
 
-        public List<Round> Rounds = new List<Round>(){new Round(), new Round(), new Round(), new Round(), new Round()};
+        public List<Round> Rounds = new List<Round>(){new Round(), new Round(), new Round(), new Round(), new Round(), new Round()};
 
         public Wordle()
         {
+            Turn = 0;
+        }
+
+        public Wordle(string[] words)
+        {
             Random rnd = new Random();
-            Word = words[rnd.Next(words.Count)];
+            Word = words[rnd.Next(words.Length)].Trim().ToUpper();
             Turn = 0;
         }
 
         public void Guess()
         {
             if (string.IsNullOrEmpty(GuessWord)) return;
-            if (Turn >= 5) return;            
+            if (GuessWord.Length != 5) throw new Exception("Your guess must be 5 letters.");
+            if (Turn >= Rounds.Count) return;            
 
             // increase turn
             Turn++;
@@ -124,11 +128,12 @@
             }
 
             int previous = (Turn - 1) >= 0 ? (Turn - 1) : 0;
-            Finished = Turn >= 5 || Rounds[previous].Score == 5;
+            Finished = Turn >= Rounds.Count || Rounds[previous].Score == 5;
         }
     }
 
-    private Wordle game;
+    private Wordle game = new Wordle();
+    public string msg = "";
 
     protected override async Task OnInitializedAsync()
     {        
@@ -137,12 +142,23 @@
 
     public async Task Setup()
     {
-        game = new Wordle();
+        var text = await Http.GetStringAsync($"wordles.txt");
+        var words = text.Split(System.Environment.NewLine);
+
+        game = new Wordle(words);
     }  
 
-    public async Task Guess()
+    public void Guess()
     {
-        game.Guess();
+        msg = "";
+        try
+        {
+            game.Guess();
+        }
+        catch(Exception ex)
+        {
+            msg = ex.Message;
+        }
     }
 
     public string GetColor(Letter letter)
@@ -212,6 +228,13 @@
                         <td><input @bind="game.Rounds[4].Four.Text" style="background-color: @GetColor(game.Rounds[4].Four)" maxlength="1" disabled="true" /></td>
                         <td><input @bind="game.Rounds[4].Five.Text"  style="background-color: @GetColor(game.Rounds[4].Five)" maxlength="1" disabled="true" /></td>
                     </tr>
+                    <tr>
+                        <td><input @bind="game.Rounds[5].One.Text" style="background-color: @GetColor(game.Rounds[5].One)" maxlength="1" disabled="true" /></td>
+                        <td><input @bind="game.Rounds[5].Two.Text" style="background-color: @GetColor(game.Rounds[5].Two)" maxlength="1" disabled="true" /></td>
+                        <td><input @bind="game.Rounds[5].Three.Text" style="background-color: @GetColor(game.Rounds[5].Three)" maxlength="1" disabled="true" /></td>
+                        <td><input @bind="game.Rounds[5].Four.Text" style="background-color: @GetColor(game.Rounds[5].Four)" maxlength="1" disabled="true" /></td>
+                        <td><input @bind="game.Rounds[5].Five.Text"  style="background-color: @GetColor(game.Rounds[5].Five)" maxlength="1" disabled="true" /></td>
+                    </tr>
                 </table>
             </div>
         </div>
@@ -230,6 +253,7 @@
         <div class="row">
             <div class="col setup">
                 <label>@(Finished())</label>
+                <label>@msg</label>
             </div>
         </div>
     </div>

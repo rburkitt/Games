@@ -144,6 +144,7 @@
     {
         var text = await Http.GetStringAsync($"Wordles.txt");
         var words = text.Split(System.Environment.NewLine);
+        msg = "";
 
         game = new Wordle(words);
     }  

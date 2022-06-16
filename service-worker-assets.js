@@ -25,11 +25,11 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-V3DbSKlVu6NvvXpYgibnoFnU5k0pvu93gVtOAzN7SWk=",
+      "hash": "sha256-CKMvuZLP7F5BrziB3+nIWQrODO0O1cRU5Cv4G4F9LEA=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-rJ4D2w+OcNcqGHBC\/9OJWIdRg1e\/QFlH94vPIbGavEU=",
+      "hash": "sha256-oku9P3LfVQcz9QcMUyQKbwdFno1AnG5sCDCdNhCpFTM=",
       "url": "_framework\/Games.dll"
     },
     {
@@ -153,7 +153,7 @@
       "url": "_framework\/dotnet.6.0.6.vp407kvhqq.js"
     },
     {
-      "hash": "sha256-38IZw4gaDkalUKiOI4vxMlhtyE+8YFRBPkiBMPMwiQs=",
+      "hash": "sha256-7lvBIwcJ9xt7Llf8qWUYj\/XmPBDarxXO3O8tPk5ibIU=",
       "url": "_framework\/dotnet.wasm"
     },
     {
@@ -249,5 +249,5 @@
       "url": "words3.json"
     }
   ],
-  "version": "PqzvKheO"
+  "version": "PO0+UPOw"
 };

@@ -165,13 +165,14 @@
         msg = "";
         try
         {
-            game.Guess();
-            myGuess.FocusAsync();
+            game.Guess();            
         }
         catch(Exception ex)
         {
             msg = ex.Message;
         }
+
+        myGuess.FocusAsync();
     }
 
     public string GetColor(Letter letter)

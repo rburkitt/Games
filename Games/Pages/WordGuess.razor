@@ -143,10 +143,7 @@
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
-        if(firstRender)
-        {
-            await myGuess.FocusAsync();
-        }
+        await myGuess.FocusAsync();
     }
 
     public async Task Setup()
@@ -156,8 +153,6 @@
         msg = "";
 
         game = new Wordle(words);
-
-        await myGuess.FocusAsync();
     }  
 
     public void Guess()
@@ -171,8 +166,6 @@
         {
             msg = ex.Message;
         }
-
-        myGuess.FocusAsync();
     }
 
     public string GetColor(Letter letter)

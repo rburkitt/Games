@@ -134,6 +134,7 @@
 
     private Wordle game = new Wordle();
     public string msg = "";
+    private ElementReference myGuess;
 
     protected override async Task OnInitializedAsync()
     {        
@@ -145,6 +146,7 @@
         var text = await Http.GetStringAsync($"Wordles.txt");
         var words = text.Split(System.Environment.NewLine);
         msg = "";
+        await myGuess.FocusAsync();
 
         game = new Wordle(words);
     }  
@@ -155,6 +157,7 @@
         try
         {
             game.Guess();
+            myGuess.FocusAsync();
         }
         catch(Exception ex)
         {
@@ -242,7 +245,7 @@
         <div class="row">&nbsp;</div>
         <div class="row">
             <div class="col setup">
-                <input class="rounded" type="text" @bind="game.GuessWord" maxlength="5" style="width: 210px;" autofocus="true" disabled="@game.Finished" />
+                <input @ref="myGuess" class="rounded" type="text" @bind="game.GuessWord" maxlength="5" style="width: 210px;" autofocus="true" disabled="@game.Finished" />
             </div>
         </div>
         <div class="row">

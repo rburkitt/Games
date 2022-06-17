@@ -141,12 +141,20 @@
         await Setup();
     }
 
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            await myGuess.FocusAsync();
+        }
+    }
+
     public async Task Setup()
     {
         var text = await Http.GetStringAsync($"Wordles.txt");
         var words = text.Split(System.Environment.NewLine);
         msg = "";
-        await myGuess.FocusAsync();
+        
 
         game = new Wordle(words);
     }  

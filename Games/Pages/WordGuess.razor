@@ -18,12 +18,8 @@
     }
     public class Round
     {        
-        public Letter One {get; set;} = new Letter();
-        public Letter Two {get; set;} = new Letter();
-        public Letter Three {get; set;} = new Letter();
-        public Letter Four {get; set;} = new Letter();
-        public Letter Five {get; set;} = new Letter();
         public int Score {get; set;} = 0;
+        public Letter[] Letters { get; } = new Letter[5]{new Letter(), new Letter(), new Letter(), new Letter(), new Letter()};
     }
     public class Wordle
     {
@@ -59,73 +55,68 @@
 
             var currentRound = Rounds.Skip(Turn - 1).First();
 
-            currentRound.One.Text = GuessWord.Substring(0, 1).ToUpper();
-            currentRound.Two.Text = GuessWord.Substring(1, 1).ToUpper();
-            currentRound.Three.Text = GuessWord.Substring(2, 1).ToUpper();
-            currentRound.Four.Text = GuessWord.Substring(3, 1).ToUpper();
-            currentRound.Five.Text = GuessWord.Substring(4, 1).ToUpper();
+            currentRound.Letters[0] = new Letter { Text = GuessWord.Substring(0, 1).ToUpper() };
+            currentRound.Letters[1] = new Letter { Text = GuessWord.Substring(1, 1).ToUpper() };
+            currentRound.Letters[2] = new Letter { Text = GuessWord.Substring(2, 1).ToUpper() };
+            currentRound.Letters[3] = new Letter { Text = GuessWord.Substring(3, 1).ToUpper() };
+            currentRound.Letters[4] = new Letter { Text = GuessWord.Substring(4, 1).ToUpper() };
+
+            var wordArray = Word.ToCharArray().Select(c => c.ToString()).ToArray();
+
+            for(int i = 0; i < currentRound.Letters.Length; i++)
+            {
+                if(Word.Contains(currentRound.Letters[i].Text))
+                {
+                    if(currentRound.Letters[i].Text == wordArray[i])
+                    {
+                        currentRound.Letters[i].Location = Location.Yes;
+                        currentRound.Score++;
+                    }
+                    else
+                    {
+                        currentRound.Letters[i].Location = Location.Contains;
+                    }
+                }
+                else
+                {
+                    currentRound.Letters[i].Location = Location.No;
+                }
+            }
+
+            for(int i = 0; i < currentRound.Letters.Length; i++)
+            {
+                var wordCount = wordArray.Count(o => o == currentRound.Letters[i].Text);
+                var guessCount = currentRound.Letters.Count(o => o.Text == currentRound.Letters[i].Text);
+                var foundCount = currentRound.Letters.Count(t => t.Text == currentRound.Letters[i].Text && t.Location == Location.Yes);
+
+                if(guessCount > 1)
+                { 
+                    if(Word.Contains(currentRound.Letters[i].Text))
+                    {
+                        if(currentRound.Letters[i].Text == wordArray[i])
+                        {
+                            currentRound.Letters[i].Location = Location.Yes;
+                        }
+                        else
+                        {
+                            if(wordCount == foundCount)
+                            {
+                                currentRound.Letters[i].Location = Location.No;
+                            }
+                            else
+                            {
+                                currentRound.Letters[i].Location = Location.Contains;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        currentRound.Letters[i].Location = Location.No;
+                    }
+                }
+            }
 
             GuessWord = "";
-
-            if(currentRound.One.Text.ToUpper() == test[0])
-            {
-                currentRound.One.Location = Location.Yes;
-                currentRound.Score++;
-            }
-            else if(Word.Contains(currentRound.One.Text))
-                currentRound.One.Location = Location.Contains;
-            else
-            {
-                currentRound.One.Location = Location.No;
-            }
-
-            if(currentRound.Two.Text.ToUpper() == test[1])
-            {
-                currentRound.Two.Location = Location.Yes;
-                currentRound.Score++;
-            }
-            else if(Word.Contains(currentRound.Two.Text))
-                currentRound.Two.Location = Location.Contains;
-            else
-            {
-                currentRound.Two.Location = Location.No;
-            }
-
-            if(currentRound.Three.Text.ToUpper() == test[2])
-            {
-                currentRound.Three.Location = Location.Yes;
-                currentRound.Score++;
-            }
-            else if(Word.Contains(currentRound.Three.Text))
-                currentRound.Three.Location = Location.Contains;
-            else
-            {
-                currentRound.Three.Location = Location.No;
-            }
-
-            if(currentRound.Four.Text.ToUpper() == test[3])
-            {
-                currentRound.Four.Location = Location.Yes;
-                currentRound.Score++;
-            }
-            else if(Word.Contains(currentRound.Four.Text))
-                currentRound.Four.Location = Location.Contains;
-            else
-            {
-                currentRound.Four.Location = Location.No;
-            }
-
-            if(currentRound.Five.Text.ToUpper() == test[4])
-            {
-                currentRound.Five.Location = Location.Yes;
-                currentRound.Score++;
-            }
-            else if(Word.Contains(currentRound.Five.Text))
-                currentRound.Five.Location = Location.Contains;
-            else
-            {
-                currentRound.Five.Location = Location.No;
-            }
 
             int previous = (Turn - 1) >= 0 ? (Turn - 1) : 0;
             Finished = Turn >= Rounds.Count || Rounds[previous].Score == 5;
@@ -200,48 +191,15 @@
         <div class="row">
             <div class="col">
                 <table>
-                    <tr>
-                        <td><input class="rounded" @bind="game.Rounds[0].One.Text" style="background-color: @GetColor(game.Rounds[0].One)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[0].Two.Text" style="background-color: @GetColor(game.Rounds[0].Two)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[0].Three.Text" style="background-color: @GetColor(game.Rounds[0].Three)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[0].Four.Text" style="background-color: @GetColor(game.Rounds[0].Four)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[0].Five.Text" style="background-color: @GetColor(game.Rounds[0].Five)" maxlength="1" disabled="true" /></td>
-                    </tr>
-                    <tr>
-                        <td><input class="rounded" @bind="game.Rounds[1].One.Text" style="background-color: @GetColor(game.Rounds[1].One)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[1].Two.Text" style="background-color: @GetColor(game.Rounds[1].Two)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[1].Three.Text" style="background-color: @GetColor(game.Rounds[1].Three)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[1].Four.Text" style="background-color: @GetColor(game.Rounds[1].Four)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[1].Five.Text" style="background-color: @GetColor(game.Rounds[1].Five)" maxlength="1" disabled="true" /></td>
-                    </tr>
-                    <tr>
-                        <td><input class="rounded" @bind="game.Rounds[2].One.Text" style="background-color: @GetColor(game.Rounds[2].One)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[2].Two.Text" style="background-color: @GetColor(game.Rounds[2].Two)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[2].Three.Text" style="background-color: @GetColor(game.Rounds[2].Three)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[2].Four.Text" style="background-color: @GetColor(game.Rounds[2].Four)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[2].Five.Text" style="background-color: @GetColor(game.Rounds[2].Five)" maxlength="1" disabled="true" /></td>
-                    </tr>
-                    <tr>
-                        <td><input class="rounded" @bind="game.Rounds[3].One.Text" style="background-color: @GetColor(game.Rounds[3].One)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[3].Two.Text" style="background-color: @GetColor(game.Rounds[3].Two)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[3].Three.Text" style="background-color: @GetColor(game.Rounds[3].Three)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[3].Four.Text" style="background-color: @GetColor(game.Rounds[3].Four)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[3].Five.Text" style="background-color: @GetColor(game.Rounds[3].Five)" maxlength="1" disabled="true" /></td>
-                    </tr>
-                    <tr>
-                        <td><input class="rounded" @bind="game.Rounds[4].One.Text" style="background-color: @GetColor(game.Rounds[4].One)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[4].Two.Text" style="background-color: @GetColor(game.Rounds[4].Two)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[4].Three.Text" style="background-color: @GetColor(game.Rounds[4].Three)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[4].Four.Text" style="background-color: @GetColor(game.Rounds[4].Four)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[4].Five.Text"  style="background-color: @GetColor(game.Rounds[4].Five)" maxlength="1" disabled="true" /></td>
-                    </tr>
-                    <tr>
-                        <td><input class="rounded" @bind="game.Rounds[5].One.Text" style="background-color: @GetColor(game.Rounds[5].One)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[5].Two.Text" style="background-color: @GetColor(game.Rounds[5].Two)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[5].Three.Text" style="background-color: @GetColor(game.Rounds[5].Three)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[5].Four.Text" style="background-color: @GetColor(game.Rounds[5].Four)" maxlength="1" disabled="true" /></td>
-                        <td><input class="rounded" @bind="game.Rounds[5].Five.Text"  style="background-color: @GetColor(game.Rounds[5].Five)" maxlength="1" disabled="true" /></td>
-                    </tr>
+                    @for(int i = 0; i < game.Rounds.Count; i++)
+                    {
+                        <tr>
+                        @for(int j = 0; j < game.Rounds[i].Letters.Length; j++)
+                        {
+                            <td><input class="rounded" @bind="game.Rounds[i].Letters[j].Text" style="background-color: @GetColor(game.Rounds[i].Letters[j])" maxlength="1" disabled="true" /></td>
+                        }
+                        </tr>
+                    }
                 </table>
             </div>
         </div>

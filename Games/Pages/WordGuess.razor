@@ -44,22 +44,14 @@
 
         public void Guess()
         {
-            if (string.IsNullOrEmpty(GuessWord)) return;
-            if (GuessWord.Length != 5) throw new Exception("Your guess must be 5 letters.");
             if (Turn >= Rounds.Count) return;            
-
-            // increase turn
-            Turn++;
 
             var test = Word.ToCharArray().Select(c => c.ToString()).ToArray();
 
-            var currentRound = Rounds.Skip(Turn - 1).First();
+            var currentRound = Rounds.Skip(Turn).First();
 
-            currentRound.Letters[0] = new Letter { Text = GuessWord.Substring(0, 1).ToUpper() };
-            currentRound.Letters[1] = new Letter { Text = GuessWord.Substring(1, 1).ToUpper() };
-            currentRound.Letters[2] = new Letter { Text = GuessWord.Substring(2, 1).ToUpper() };
-            currentRound.Letters[3] = new Letter { Text = GuessWord.Substring(3, 1).ToUpper() };
-            currentRound.Letters[4] = new Letter { Text = GuessWord.Substring(4, 1).ToUpper() };
+            if(currentRound.Letters.Any(o => o.Text == ""))
+                throw new Exception("Your guess must be 5 letters.");            
 
             var wordArray = Word.ToCharArray().Select(c => c.ToString()).ToArray();
 
@@ -119,22 +111,31 @@
             GuessWord = "";
 
             int previous = (Turn - 1) >= 0 ? (Turn - 1) : 0;
-            Finished = Turn >= Rounds.Count || Rounds[previous].Score == 5;
+            Finished = Turn >= Rounds.Count - 1 || Rounds[Turn].Score == 5;
+
+            // increase turn
+            Turn++;
+        }
+
+        public void SetLetter(int index, string letter)
+        {
+            var currentRound = Rounds.Skip(Turn).First();
+            currentRound.Letters[index].Text = letter.ToUpper();
+        }
+
+        public void DeleteLetter(int index)
+        {
+            var currentRound = Rounds.Skip(Turn).First();
+            currentRound.Letters[index].Text = "";
         }
     }
 
     private Wordle game = new Wordle();
     public string msg = "";
-    private ElementReference myGuess;
 
     protected override async Task OnInitializedAsync()
     {        
         await Setup();
-    }
-
-    protected async override Task OnAfterRenderAsync(bool firstRender)
-    {
-        await myGuess.FocusAsync();
     }
 
     public async Task Setup()
@@ -142,6 +143,7 @@
         var text = await Http.GetStringAsync($"Wordles.txt");
         var words = text.Split(System.Environment.NewLine);
         msg = "";
+        clicks = 0;
 
         game = new Wordle(words);
     }  
@@ -157,6 +159,8 @@
         {
             msg = ex.Message;
         }
+
+        clicks = 0;
     }
 
     public string GetColor(Letter letter)
@@ -182,12 +186,30 @@
     {
         return game.Finished ? game.Word : string.Empty;
     }
+
+    int clicks = 0;
+    public void SetLetter(string letter)
+    {
+        game.SetLetter(clicks, letter);
+
+        if (clicks < 4)
+            clicks++;
+    }
+
+    public void DeleteLetter()
+    {
+        game.DeleteLetter(clicks);  
+        
+        if (clicks > 0)
+            clicks--;
+    }
 }
 
 <div class="gameContainer">
-    <h3>Word Guess</h3>
+
 
     <div class="container">
+            <h3>Word Guess</h3>
         <div class="row">
             <div class="col">
                 <table>
@@ -205,8 +227,42 @@
         </div>
         <div class="row">&nbsp;</div>
         <div class="row">
-            <div class="col setup">
-                <input @ref="myGuess" class="rounded" type="text" @bind="game.GuessWord" maxlength="5" style="width: 210px;" autofocus="true" disabled="@game.Finished" />
+            <div class="col setup keyboard">
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("Q"))' disabled="@game.Finished">Q</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("W"))' disabled="@game.Finished">W</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("E"))' disabled="@game.Finished">E</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("R"))' disabled="@game.Finished">R</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("T"))' disabled="@game.Finished">T</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("Y"))' disabled="@game.Finished">Y</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("U"))' disabled="@game.Finished">U</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("I"))' disabled="@game.Finished">I</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("O"))' disabled="@game.Finished">O</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("P"))' disabled="@game.Finished">P</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col setup keyboard">
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("A"))' disabled="@game.Finished">A</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("S"))' disabled="@game.Finished">S</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("D"))' disabled="@game.Finished">D</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("F"))' disabled="@game.Finished">F</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("G"))' disabled="@game.Finished">G</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("H"))' disabled="@game.Finished">H</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("J"))' disabled="@game.Finished">J</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("K"))' disabled="@game.Finished">K</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("L"))' disabled="@game.Finished">L</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col setup keyboard">
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("Z"))' disabled="@game.Finished">Z</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("X"))' disabled="@game.Finished">X</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("C"))' disabled="@game.Finished">C</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("V"))' disabled="@game.Finished">V</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("B"))' disabled="@game.Finished">B</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("N"))' disabled="@game.Finished">N</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("M"))' disabled="@game.Finished">M</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => DeleteLetter())' disabled="@game.Finished">&#9003;</button>
             </div>
         </div>
         <div class="row">
@@ -225,10 +281,17 @@
 </div>
 <style>
     .gameContainer {
-        padding: 15px;
-        width: 300px;
+        padding: 5px;
+        width: 500px;
         margin: auto;
     }
     input { width: 40px; }
-    input:disabled { color: white; font-weight: bold; }
+    input:disabled { background-color: white; font-weight: bold; }
+    div.keyboard button { font-size: x-small; }
+    .container {
+        align-content: center;
+        text-align: center;
+        display: grid;
+        place-items: center;
+    }
 </style>

@@ -207,7 +207,6 @@
 
 <div class="gameContainer">
     <div class="container">
-        <h3>Word Guess</h3>
         <div class="row">
             <div class="col">
                 <table>
@@ -223,7 +222,6 @@
                 </table>
             </div>
         </div>
-        <div class="row">&nbsp;</div>
         <div class="row">
             <div class="col setup keyboard">
                 <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick='(() => SetLetter("Q"))' disabled="@game.Finished">Q</button>
@@ -281,6 +279,7 @@
     .gameContainer {
         width: 386px;
         margin-left: 0px;
+        text-align: left;
     }
     input { width: 40px; }
     input:disabled { background-color: white; font-weight: bold; }
@@ -291,5 +290,9 @@
         text-align: center;
         display: grid;
         place-items: center;
+        margin-left: 0px !important;
+    }
+    .top-row[b-d43zj6zlhp], article[b-d43zj6zlhp] {
+        padding-left: 0rem !important;
     }
 </style>

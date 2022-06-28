@@ -206,10 +206,8 @@
 }
 
 <div class="gameContainer">
-
-
     <div class="container">
-            <h3>Word Guess</h3>
+        <h3>Word Guess</h3>
         <div class="row">
             <div class="col">
                 <table>
@@ -267,8 +265,8 @@
         </div>
         <div class="row">
             <div class="col setup">
-                <button class="btn btn-outline-primary rounded" style="margin-top: 10px;" @onclick="@Guess" disabled="@game.Finished">Guess</button>
-                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px;" @onclick="@Setup">New</button>
+                <button class="btn btn-outline-primary rounded" style="margin-top: 10px; font-size: xx-small" @onclick="@Guess" disabled="@game.Finished">Guess</button>
+                <button class="btn btn-outline-secondary rounded" style="margin-top: 10px; font-size: xx-small" @onclick="@Setup">New</button>
             </div>
         </div>
         <div class="row">
@@ -281,14 +279,15 @@
 </div>
 <style>
     .gameContainer {
-        padding: 5px;
-        width: 500px;
-        margin: auto;
+        width: 395px;
+        border: 1px solid red;
     }
     input { width: 40px; }
     input:disabled { background-color: white; font-weight: bold; }
-    div.keyboard button { font-size: x-small; }
+    div.keyboard button { font-size: xx-small; }
     .container {
+        border: 1px solid;
+        width: 395px;
         align-content: center;
         text-align: center;
         display: grid;

@@ -25,19 +25,19 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-62I2xIBfbCs3N7eisaNzYCyBXy9ZUmUls8uZp7IHVvs=",
+      "hash": "sha256-UIfeuVzN0SZPVtx3l50C4T3pseqhnkYlrS4AyCO92gM=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-lQ3rUSgtjDjv9v8foLRYIdC5KuSyyyWRpAuC6Jjl7kU=",
+      "hash": "sha256-ZT2eiH6Me37KLIlOi664y4Y2q9QhBa1JmcbmEqu0Mkw=",
       "url": "_framework\/Games.dll"
     },
     {
-      "hash": "sha256-oywvOohq+KtcXkaq3vINHPqkKy53hx5AbO2dOooMwz0=",
+      "hash": "sha256-pcYmksy4JKgHbkNa54VUhGnsruacuXLq694Bvkva2vs=",
       "url": "_framework\/Microsoft.AspNetCore.Components.dll"
     },
     {
-      "hash": "sha256-Lrw4Oy+o6oJ8FtpXBOj264\/qU5tOC5IFP+9eah9BZJY=",
+      "hash": "sha256-LxZ7HJ8eLJ8fbfDHpXkGb9VhtdUfHxfLq7a9SmRxCiM=",
       "url": "_framework\/Microsoft.AspNetCore.Components.Web.dll"
     },
     {
@@ -101,7 +101,7 @@
       "url": "_framework\/System.ComponentModel.dll"
     },
     {
-      "hash": "sha256-iXmhXS8ihVgSNJrCHhG4LjlT\/XUMdASK++a3kxMRQfw=",
+      "hash": "sha256-nLu4pi1gYtwd0U8pzMbEDsFkc0BuhxKOsi3IDJBlynU=",
       "url": "_framework\/System.Linq.dll"
     },
     {
@@ -137,7 +137,7 @@
       "url": "_framework\/System.Runtime.CompilerServices.Unsafe.dll"
     },
     {
-      "hash": "sha256-9P6vfxsG7LymahktWCHM7Guk4Nv2n\/MrRX5+tr8MMcA=",
+      "hash": "sha256-UeV6AeWcNAnAg2cy9OgurfUGmcRIMwkrE5RXyakxSxw=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -149,11 +149,11 @@
       "url": "_framework\/System.Text.Json.dll"
     },
     {
-      "hash": "sha256-5V4eHUDNnVxor2BgK4\/HcrAFOycuNvAPBZo\/SPFngC8=",
+      "hash": "sha256-u98+peP7xiKbfAP0GIkehpkSUNxs7OZsLAVIfBXllc8=",
       "url": "_framework\/dotnet.6.0.6.vp407kvhqq.js"
     },
     {
-      "hash": "sha256-lXS+JV\/LbR8OwueCuIMLLNCDwig\/NkwtjJ4K8kNp5Ck=",
+      "hash": "sha256-n5RfO2TPvzkfJQuONbeZGEgfj0B5GmYNkhnPEzX+v18=",
       "url": "_framework\/dotnet.wasm"
     },
     {
@@ -249,5 +249,5 @@
       "url": "words3.json"
     }
   ],
-  "version": "5\/ufYYri"
+  "version": "I5KKT6zp"
 };

@@ -252,84 +252,77 @@
 
     public void DeleteLetter()
     {
-        game.DeleteLetter(clicks);  
-        
+        game.DeleteLetter(clicks);
+        guesses.RemoveAt(clicks);
+
         if (clicks > 0)
             clicks--;
     }
 }
 
 <div class="gameContainer">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <table>
-                    @for(int i = 0; i < game.Rounds.Count; i++)
-                    {
-                        <tr>
-                        @for(int j = 0; j < game.Rounds[i].Letters.Length; j++)
-                        {
-                            <td><input class="rounded" @bind="game.Rounds[i].Letters[j].Text" style="background-color: @GetColor(game.Rounds[i].Letters[j]); color: @GetForeColor(game.Rounds[i].Letters[j]);" maxlength="1" disabled="true" /></td>
-                        }
-                        </tr>
-                    }
-                </table>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col setup keyboard">
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Q"); color: @SetForeColor("Q")' @onclick='(() => SetLetter("Q"))' disabled="@game.Finished">Q</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("W"); color: @SetForeColor("W")' @onclick='(() => SetLetter("W"))' disabled="@game.Finished">W</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("E"); color: @SetForeColor("E")' @onclick='(() => SetLetter("E"))' disabled="@game.Finished">E</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("R"); color: @SetForeColor("R")' @onclick='(() => SetLetter("R"))' disabled="@game.Finished">R</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("T"); color: @SetForeColor("T")' @onclick='(() => SetLetter("T"))' disabled="@game.Finished">T</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Y"); color: @SetForeColor("Y")' @onclick='(() => SetLetter("Y"))' disabled="@game.Finished">Y</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("U"); color: @SetForeColor("U")' @onclick='(() => SetLetter("U"))' disabled="@game.Finished">U</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("I"); color: @SetForeColor("I")' @onclick='(() => SetLetter("I"))' disabled="@game.Finished">I</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("O"); color: @SetForeColor("O")' @onclick='(() => SetLetter("O"))' disabled="@game.Finished">O</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("P"); color: @SetForeColor("P")' @onclick='(() => SetLetter("P"))' disabled="@game.Finished">P</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col setup keyboard">
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("A"); color: @SetForeColor("A")' @onclick='(() => SetLetter("A"))' disabled="@game.Finished">A</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("S"); color: @SetForeColor("S")' @onclick='(() => SetLetter("S"))' disabled="@game.Finished">S</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("D"); color: @SetForeColor("D")' @onclick='(() => SetLetter("D"))' disabled="@game.Finished">D</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("F"); color: @SetForeColor("F")' @onclick='(() => SetLetter("F"))' disabled="@game.Finished">F</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("G"); color: @SetForeColor("G")' @onclick='(() => SetLetter("G"))' disabled="@game.Finished">G</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("H"); color: @SetForeColor("H")' @onclick='(() => SetLetter("H"))' disabled="@game.Finished">H</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("J"); color: @SetForeColor("J")' @onclick='(() => SetLetter("J"))' disabled="@game.Finished">J</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("K"); color: @SetForeColor("K")' @onclick='(() => SetLetter("K"))' disabled="@game.Finished">K</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("L"); color: @SetForeColor("L")' @onclick='(() => SetLetter("L"))' disabled="@game.Finished">L</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col setup keyboard">
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Z"); color: @SetForeColor("Z")' @onclick='(() => SetLetter("Z"))' disabled="@game.Finished">Z</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("X"); color: @SetForeColor("X")' @onclick='(() => SetLetter("X"))' disabled="@game.Finished">X</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("C"); color: @SetForeColor("C")' @onclick='(() => SetLetter("C"))' disabled="@game.Finished">C</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("V"); color: @SetForeColor("V")' @onclick='(() => SetLetter("V"))' disabled="@game.Finished">V</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("B"); color: @SetForeColor("B")' @onclick='(() => SetLetter("B"))' disabled="@game.Finished">B</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("N"); color: @SetForeColor("N")' @onclick='(() => SetLetter("N"))' disabled="@game.Finished">N</button>
-                <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("M"); color: @SetForeColor("M")' @onclick='(() => SetLetter("M"))' disabled="@game.Finished">M</button>
-                <button class="btn btn-outline-secondary rounded" @onclick="DeleteLetter" disabled="@game.Finished">&#9003;</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col setup">
-                <button class="btn btn-outline-primary rounded" style="margin-top: 5px; font-size: xx-small" @onclick="@Guess" disabled="@game.Finished">Guess</button>
-                <button class="btn btn-outline-secondary rounded" style="margin-top: 5px; font-size: xx-small" @onclick="@Setup">New</button>
-                <label>@(Finished())</label>
-                <label>@msg</label>
-            </div>
-        </div>
+
+    <div id="stack">
+            @for(int i = 0; i < game.Rounds.Count; i++)
+            {
+                @for(int j = 0; j < game.Rounds[i].Letters.Length; j++)
+                {
+                    <input class="rounded" @bind="game.Rounds[i].Letters[j].Text" style="background-color: @GetColor(game.Rounds[i].Letters[j]); color: @GetForeColor(game.Rounds[i].Letters[j]);" maxlength="1" disabled="true" />
+                }
+            }
     </div>
+            
+    <div class="keyboard keyboard1">                
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Q"); color: @SetForeColor("Q")' @onclick='(() => SetLetter("Q"))' disabled="@game.Finished">Q</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("W"); color: @SetForeColor("W")' @onclick='(() => SetLetter("W"))' disabled="@game.Finished">W</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("E"); color: @SetForeColor("E")' @onclick='(() => SetLetter("E"))' disabled="@game.Finished">E</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("R"); color: @SetForeColor("R")' @onclick='(() => SetLetter("R"))' disabled="@game.Finished">R</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("T"); color: @SetForeColor("T")' @onclick='(() => SetLetter("T"))' disabled="@game.Finished">T</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Y"); color: @SetForeColor("Y")' @onclick='(() => SetLetter("Y"))' disabled="@game.Finished">Y</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("U"); color: @SetForeColor("U")' @onclick='(() => SetLetter("U"))' disabled="@game.Finished">U</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("I"); color: @SetForeColor("I")' @onclick='(() => SetLetter("I"))' disabled="@game.Finished">I</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("O"); color: @SetForeColor("O")' @onclick='(() => SetLetter("O"))' disabled="@game.Finished">O</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("P"); color: @SetForeColor("P")' @onclick='(() => SetLetter("P"))' disabled="@game.Finished">P</button>
+    </div>
+
+    <div class="keyboard keyboard2">
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("A"); color: @SetForeColor("A")' @onclick='(() => SetLetter("A"))' disabled="@game.Finished">A</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("S"); color: @SetForeColor("S")' @onclick='(() => SetLetter("S"))' disabled="@game.Finished">S</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("D"); color: @SetForeColor("D")' @onclick='(() => SetLetter("D"))' disabled="@game.Finished">D</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("F"); color: @SetForeColor("F")' @onclick='(() => SetLetter("F"))' disabled="@game.Finished">F</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("G"); color: @SetForeColor("G")' @onclick='(() => SetLetter("G"))' disabled="@game.Finished">G</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("H"); color: @SetForeColor("H")' @onclick='(() => SetLetter("H"))' disabled="@game.Finished">H</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("J"); color: @SetForeColor("J")' @onclick='(() => SetLetter("J"))' disabled="@game.Finished">J</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("K"); color: @SetForeColor("K")' @onclick='(() => SetLetter("K"))' disabled="@game.Finished">K</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("L"); color: @SetForeColor("L")' @onclick='(() => SetLetter("L"))' disabled="@game.Finished">L</button>
+    </div>
+
+    <div class="keyboard keyboard3">
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Z"); color: @SetForeColor("Z")' @onclick='(() => SetLetter("Z"))' disabled="@game.Finished">Z</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("X"); color: @SetForeColor("X")' @onclick='(() => SetLetter("X"))' disabled="@game.Finished">X</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("C"); color: @SetForeColor("C")' @onclick='(() => SetLetter("C"))' disabled="@game.Finished">C</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("V"); color: @SetForeColor("V")' @onclick='(() => SetLetter("V"))' disabled="@game.Finished">V</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("B"); color: @SetForeColor("B")' @onclick='(() => SetLetter("B"))' disabled="@game.Finished">B</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("N"); color: @SetForeColor("N")' @onclick='(() => SetLetter("N"))' disabled="@game.Finished">N</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("M"); color: @SetForeColor("M")' @onclick='(() => SetLetter("M"))' disabled="@game.Finished">M</button>
+        <button class="btn btn-outline-secondary rounded" @onclick="DeleteLetter" disabled="@game.Finished">&#9003;</button>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-outline-primary rounded" @onclick="@Guess" disabled="@game.Finished">Guess</button>
+        <button class="btn btn-outline-secondary rounded" @onclick="@Setup">New</button>
+        <label>@(Finished())</label>
+        <label>@msg</label>
+    </div>
+
 </div>
+
 <style>
     .gameContainer {
-        width: 386px;
-        margin-left: 0px !important;
-        text-align: left;
+        display: grid;
+        grid-template-columns: auto;
+        justify-items: center;
+        align-items: center;
     }
     input { width: 40px; }
     input:disabled { 
@@ -338,18 +331,49 @@
     }
     div.keyboard button { 
         font-weight: bold;
-        font-size: x-small; 
+        font-size: xx-small; 
         padding: 8px; 
-        margin-top: 5px; }
-    .container {
-        width: 386px;
-        align-content: center;
-        text-align: center;
-        display: grid;
-        place-items: center;
-        margin-left: 0px !important;
+        margin-top: 5px; 
+        width: 25px;
     }
-    .top-row[b-d43zj6zlhp], article[b-d43zj6zlhp] {
-        padding-left: 0rem !important;
+
+    #stack {
+        display: grid;
+        grid-template-columns: repeat(5, 40px);
+        grid-gap: 2px;
+        padding: 2px;
+    }
+
+    .keyboard1 {
+        display: grid;
+        grid-template-columns: repeat(10, 30px);
+        grid-gap: 1px;
+        padding: 1px;
+    }
+
+    .keyboard2 {
+        display: grid;
+        grid-template-columns: repeat(9, 30px);
+        grid-gap: 1px;
+        padding: 1px;
+    }
+
+    .keyboard3 {
+        display: grid;
+        grid-template-columns: repeat(8, 30px);
+        grid-gap: 1px;
+        padding: 1px;
+    }
+
+    .controls {
+        display: grid;
+        grid-template-columns: 50px 50px auto auto;
+        grid-gap: 1px;
+        padding: 1px;
+    }
+
+    div.controls button {
+        margin-top: 5px; 
+        font-size: xx-small
     }
 </style>

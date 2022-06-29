@@ -185,6 +185,16 @@
         return retVal;
     }
 
+    public string GetForeColor(Letter letter)
+    {
+        string retVal = "black";
+
+        if (GetColor(letter) != "white")
+            retVal = "white";
+
+        return retVal;
+    }
+
     public string SetKeyColor(string letter)
     {
         string retVal = "white";
@@ -259,7 +269,7 @@
                         <tr>
                         @for(int j = 0; j < game.Rounds[i].Letters.Length; j++)
                         {
-                            <td><input class="rounded" @bind="game.Rounds[i].Letters[j].Text" style="background-color: @GetColor(game.Rounds[i].Letters[j])" maxlength="1" disabled="true" /></td>
+                            <td><input class="rounded" @bind="game.Rounds[i].Letters[j].Text" style="background-color: @GetColor(game.Rounds[i].Letters[j]); color: @GetForeColor(game.Rounds[i].Letters[j]);" maxlength="1" disabled="true" /></td>
                         }
                         </tr>
                     }
@@ -329,9 +339,7 @@
     div.keyboard button { 
         font-weight: bold;
         font-size: x-small; 
-        padding: 9px; 
-        padding-bottom: 8px;
-        padding-top: 8px;
+        padding: 8px; 
         margin-top: 5px; }
     .container {
         width: 386px;

@@ -110,7 +110,6 @@
 
             GuessWord = "";
 
-            int previous = (Turn - 1) >= 0 ? (Turn - 1) : 0;
             Finished = Turn >= Rounds.Count - 1 || Rounds[Turn].Score == 5;
 
             // increase turn
@@ -153,6 +152,8 @@
 
     public void Guess()
     {
+        if (clicks < 5) return;
+
         msg = "";
         try
         {
@@ -243,20 +244,25 @@
 
     public void SetLetter(string letter)
     {
+        if (clicks == 5) return;
+
         guesses.Add(letter);
         game.SetLetter(clicks, letter);
 
-        if (clicks < 4)
+        if (clicks < 5)
             clicks++;
     }
 
     public void DeleteLetter()
     {
-        game.DeleteLetter(clicks);
-        guesses.RemoveAt(clicks);
+        if (clicks == 0) return;
 
-        if (clicks > 0)
-            clicks--;
+        game.DeleteLetter(clicks-1);
+
+        if(guesses.Any())
+            guesses.RemoveAt(clicks-1);
+
+        clicks--;
     }
 }
 

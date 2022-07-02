@@ -273,7 +273,7 @@
             {
                 @for(int j = 0; j < game.Rounds[i].Letters.Length; j++)
                 {
-                    <input class="rounded" @bind="game.Rounds[i].Letters[j].Text" style="background-color: @GetColor(game.Rounds[i].Letters[j]); color: @GetForeColor(game.Rounds[i].Letters[j]);" maxlength="1" disabled="true" />
+                    <label class="form-control rounded" style="background-color: @GetColor(game.Rounds[i].Letters[j]); color: @GetForeColor(game.Rounds[i].Letters[j]);">@game.Rounds[i].Letters[j].Text</label>
                 }
             }
     </div>
@@ -330,10 +330,11 @@
         justify-items: center;
         align-items: center;
     }
-    input { width: 40px; }
-    input:disabled { 
-        background-color: white; 
+    #stack label { 
+        width: 40px; 
+        height: 40px;
         font-weight: bold; 
+        /*border: 1px solid;*/ 
     }
     div.keyboard button { 
         font-weight: bold;

@@ -25,15 +25,15 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-6qAQJrsvdNmjc3td9KgPQeoCUxP7Dwh6tNx85iFb8\/Y=",
+      "hash": "sha256-qvJxih453gJYesANfHkVppJcMA\/HCgSVwWK2MrpORQQ=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-Sm+iSULFUV8ogf43Vob3YUd8rY3EMF920ZnKplARwqI=",
+      "hash": "sha256-8sBvBpEWtEg3CU4OjxInjej+WwGorhuKhk1wAdFeF7Y=",
       "url": "_framework\/Games.dll"
     },
     {
-      "hash": "sha256-pcYmksy4JKgHbkNa54VUhGnsruacuXLq694Bvkva2vs=",
+      "hash": "sha256-1xApvo900FqwR0JA+aGLzimg4kyBcYMhnaWjegU3F20=",
       "url": "_framework\/Microsoft.AspNetCore.Components.dll"
     },
     {
@@ -121,7 +121,7 @@
       "url": "_framework\/System.Net.Primitives.dll"
     },
     {
-      "hash": "sha256-GTv4N6L1Raowhp6M6XrTXfrkaq\/bS0tiGq49XbtSNiA=",
+      "hash": "sha256-0j7CRRM+wMtaWZ6yyKjEnZE6fdMUENgAFJX4Se\/c7Sk=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -137,7 +137,7 @@
       "url": "_framework\/System.Runtime.CompilerServices.Unsafe.dll"
     },
     {
-      "hash": "sha256-UeV6AeWcNAnAg2cy9OgurfUGmcRIMwkrE5RXyakxSxw=",
+      "hash": "sha256-1WHykL9LUaO1VYHTHImnKk58+divRot8OX5eO2Znn3I=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -149,11 +149,11 @@
       "url": "_framework\/System.Text.Json.dll"
     },
     {
-      "hash": "sha256-uTdUaRZqCkCocUqxpyb1SQarEeO0SQv4Lu0V+biNcf4=",
+      "hash": "sha256-jXIbNspxFpqzUYsO2ANeqzGd72N+9lM5tHsUilsZFVA=",
       "url": "_framework\/dotnet.6.0.6.vp407kvhqq.js"
     },
     {
-      "hash": "sha256-HaidZl4JZQ5Ga70KKVHcF80PFTauHtonvPbwUCqPr1k=",
+      "hash": "sha256-kFvLVYGXaFsZzjkxBfXeoW1BxZKhxm1abbS\/7Osmk60=",
       "url": "_framework\/dotnet.wasm"
     },
     {
@@ -249,5 +249,5 @@
       "url": "words3.json"
     }
   ],
-  "version": "vanaLE54"
+  "version": "7tfguJS5"
 };

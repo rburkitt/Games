@@ -133,6 +133,7 @@
     public string msg = "";
     int clicks = 0;
     List<string> guesses = new List<string>();
+    bool update = false;
 
     protected override async Task OnInitializedAsync()
     {        
@@ -146,6 +147,7 @@
         msg = "";
         clicks = 0;
         guesses = new List<string>();
+        update = false;
 
         game = new Wordle(words);
     }  
@@ -165,11 +167,14 @@
         }
 
         clicks = 0;
+        update = true;
     }
 
     public string GetColor(Letter letter)
     {
         string retVal = "white";
+
+        if (!update) return retVal;
 
         if(string.IsNullOrEmpty(letter.Text))
             return retVal;
@@ -190,6 +195,8 @@
     {
         string retVal = "black";
 
+        if (!update) return retVal;
+
         if (GetColor(letter) != "white")
             retVal = "white";
 
@@ -199,6 +206,8 @@
     public string SetKeyColor(string letter)
     {
         string retVal = "white";
+
+        if (!update) return retVal;
 
         if (game.Turn < 1)
             return retVal;
@@ -231,6 +240,8 @@
     {
         string retVal = "black";
 
+        if (!update) return retVal;
+
         if (SetKeyColor(letter) != "white")
             retVal = "white";
 
@@ -244,6 +255,8 @@
 
     public void SetLetter(string letter)
     {
+        update = false;
+
         if (clicks == 5) return;
 
         guesses.Add(letter);
@@ -255,6 +268,8 @@
 
     public void DeleteLetter()
     {
+        update = false;
+
         if (clicks == 0) return;
 
         game.DeleteLetter(clicks-1);

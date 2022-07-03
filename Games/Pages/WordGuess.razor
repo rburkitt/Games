@@ -174,8 +174,6 @@
     {
         string retVal = "white";
 
-        if (!update) return retVal;
-
         if(string.IsNullOrEmpty(letter.Text))
             return retVal;
 
@@ -195,35 +193,19 @@
     {
         string retVal = "black";
 
-        if (!update) return retVal;
-
         if (GetColor(letter) != "white")
             retVal = "white";
 
         return retVal;
     }
 
-    public string SetKeyColor(string letter)
+    public string GetColor(int index, string letter, string color)
     {
-        string retVal = "white";
+        string retVal = color;
 
-        if (!update) return retVal;
-
-        if (game.Turn < 1)
-            return retVal;
-
-        if (!guesses.Contains(letter))
-            return retVal;
-
-        if(!game.Word.Contains(letter))
-            retVal = "gray";
-
-        if(game.Word.Contains(letter))
-            retVal = "orange";
-
-        var currentRound = game.Rounds[game.Turn-1];
+        var currentRound = game.Rounds[index];
         var test = currentRound.Letters.FirstOrDefault(o => o.Text == letter);
-        if(test != null)
+        if (test != null)
         {
             if (test.Location == Location.Yes)
                 retVal = "green";
@@ -232,6 +214,27 @@
             if (test.Location == Location.No)
                 retVal = "gray";
         }
+        return retVal;
+    }
+
+    public string SetKeyColor(string letter)
+    {
+        string retVal = "white";
+
+        if (game.Turn < 1)
+        {
+            return retVal;
+        }
+
+        for(int i = 0; i < game.Turn-1; i++)
+        {
+            retVal = GetColor(i, letter, retVal);
+        }
+
+        if (update)
+        {
+            retVal = GetColor(game.Turn - 1, letter, retVal);            
+        }
 
         return retVal;
     }
@@ -239,8 +242,6 @@
     public string SetForeColor(string letter)
     {
         string retVal = "black";
-
-        if (!update) return retVal;
 
         if (SetKeyColor(letter) != "white")
             retVal = "white";
@@ -255,7 +256,7 @@
 
     public void SetLetter(string letter)
     {
-        update = false;
+        update = true;
 
         if (clicks == 5) return;
 
@@ -268,8 +269,6 @@
 
     public void DeleteLetter()
     {
-        update = false;
-
         if (clicks == 0) return;
 
         game.DeleteLetter(clicks-1);
@@ -278,6 +277,8 @@
             guesses.RemoveAt(clicks-1);
 
         clicks--;
+
+        update = true;
     }
 }
 

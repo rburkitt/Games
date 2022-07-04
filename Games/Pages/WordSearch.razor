@@ -4,7 +4,7 @@
 @using System.Collections.Generic;
 
 @code {
-    private Word[] wordList;
+    private string[] wordList;
     private wordSearch theGameW;
     private bool HidePuzzle { get; set; } = false;
     private bool HideSolution { get; set; } = true;
@@ -20,12 +20,12 @@
     public async Task Setup()
     {
         Random rnd = new Random();
-        wordList = await Http.GetFromJsonAsync<Word[]>($"words{rnd.Next(1, 4)}.json");
-
+        var text = await Http.GetStringAsync($"Wordles.txt");
+        wordList = text.Split(new string[] {"\n", "\r\n"}, StringSplitOptions.RemoveEmptyEntries);
         HidePuzzle = false;
         HideSolution = true;
 
-        theGameW = new wordSearch(wordList.OrderBy(o => System.Guid.NewGuid().ToString()).ToList(), 10, 10);
+        theGameW = new wordSearch(wordList.OrderBy(o => System.Guid.NewGuid().ToString()).Take(15).ToList(), 10, 10);
 
         for (int r = 0; r < bgColor.GetLength(0); r++)
         {
@@ -73,8 +73,6 @@
         }
     }    
 }
-
-<h3>Word Search</h3>
 
 <div class="container">
     <div class="row">

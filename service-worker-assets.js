@@ -225,7 +225,7 @@
       "url": "index.html"
     },
     {
-      "hash": "sha256-oQCcPiTI74vZV23mU66EUP1qD2RG1ZrD0Aitf8Uri00=",
+      "hash": "sha256-\/ZdVSAz8B\/uuw215F0N+n3sy4sxrtdp83drfEmHAMxE=",
       "url": "manifest.json"
     },
     {
@@ -245,5 +245,5 @@
       "url": "words3.json"
     }
   ],
-  "version": "QFHyptiT"
+  "version": "b\/on6bOi"
 };

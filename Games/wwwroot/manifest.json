@@ -1,8 +1,8 @@
 {
   "name": "Games",
   "short_name": "Games",
-  "start_url": "https://rburkitt.github.io/Games/",
-  "scope": "https://rburkitt.github.io/Games/",
+  "start_url": "/Games/",
+  "scope": "/Games/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#03173d",

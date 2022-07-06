@@ -21,6 +21,10 @@ jobs:
         # install wasm-tools
         - name: Install Wasm-tools
           run: dotnet workload install wasm-tools 
+          
+        # clean project
+        - name: Clean .NET Core Project
+          run: dotnet clean
 
         # publishes Blazor project to the release-folder
         - name: Publish .NET Core Project

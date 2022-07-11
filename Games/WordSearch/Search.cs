@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Games.Pages
+namespace Games.WordSearch
 {
     public class Word
     {
         public string Text { get; set; }
 
     }
-    public class wordSearch
+    public class Search
     {
         public string[,] puzzle;
         public List<string> found;
         public string[,] solution;
 
-        public wordSearch(List<string> theWords, int height = 10, int width = 10)
+        public Search(List<string> theWords, int height = 10, int width = 10)
         {
             Random rnd = new Random();
             found = new List<string>();

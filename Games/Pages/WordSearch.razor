@@ -1,6 +1,7 @@
 ﻿@page "/wordsearch"
 
 @using System.Collections.Generic;
+@using Games.WordSearch
 @using Games.Services
 
 @code {
@@ -8,7 +9,7 @@
     public IWordService WordService { get; set; }
 
     private string[] wordList;
-    private wordSearch theGameW;
+    private Search theGameW;
     private bool HidePuzzle { get; set; } = false;
     private bool HideSolution { get; set; } = true;
     private string[,] bgColor = new string[10, 10];
@@ -29,7 +30,7 @@
         HidePuzzle = false;
         HideSolution = true;
 
-        theGameW = new wordSearch(wordList.OrderBy(o => System.Guid.NewGuid().ToString()).Take(15).ToList(), 10, 10);
+        theGameW = new Search(wordList.OrderBy(o => System.Guid.NewGuid().ToString()).Take(15).ToList(), 10, 10);
 
         for (int r = 0; r < bgColor.GetLength(0); r++)
         {
@@ -43,7 +44,6 @@
         for(int i = 0; i < theGameW.found.Count; i++)
         {
             finds[i] = "";
-
         }
     }
 

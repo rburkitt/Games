@@ -1,4 +1,4 @@
-﻿namespace Games.Pages
+﻿namespace Games.WordGuess
 {
     public class Wordle
     {

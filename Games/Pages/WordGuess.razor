@@ -1,134 +1,11 @@
 @page "/wordguess"
-@inject HttpClient Http
 
 @using System.Collections.Generic;
+@using Games.Services
 
 @code {
-    public enum Location
-    {
-        Yes = 0,
-        No = 1,
-        Contains = 2,
-        Empty = 3
-    }
-    public class Letter
-    {
-        public string Text {get; set;} = "";
-        public Location Location {get; set;} = Location.Empty;
-    }
-    public class Round
-    {        
-        public int Score {get; set;} = 0;
-        public Letter[] Letters { get; } = new Letter[5]{new Letter(), new Letter(), new Letter(), new Letter(), new Letter()};
-    }
-    public class Wordle
-    {
-        public string Word {get; set;}= "";
-        public int Turn {get; set;} = 0;
-        public string GuessWord { get; set; } = "";
-        public bool Finished { get; set; } = false;
-
-        public List<Round> Rounds = new List<Round>(){new Round(), new Round(), new Round(), new Round(), new Round(), new Round()};
-
-        public Wordle()
-        {
-            Turn = 0;
-        }
-
-        public Wordle(string[] words)
-        {
-            Random rnd = new Random();
-            Word = words[rnd.Next(words.Length)].Trim().ToUpper();
-            Turn = 0;
-        }
-
-        public void Guess()
-        {
-            if (Turn >= Rounds.Count) return;            
-
-            var test = Word.ToCharArray().Select(c => c.ToString()).ToArray();
-
-            var currentRound = Rounds.Skip(Turn).First();
-
-            if(currentRound.Letters.Any(o => o.Text == ""))
-                throw new Exception("Your guess must be 5 letters.");            
-
-            var wordArray = Word.ToCharArray().Select(c => c.ToString()).ToArray();
-
-            for(int i = 0; i < currentRound.Letters.Length; i++)
-            {
-                if(Word.Contains(currentRound.Letters[i].Text))
-                {
-                    if(currentRound.Letters[i].Text == wordArray[i])
-                    {
-                        currentRound.Letters[i].Location = Location.Yes;
-                        currentRound.Score++;
-                    }
-                    else
-                    {
-                        currentRound.Letters[i].Location = Location.Contains;
-                    }
-                }
-                else
-                {
-                    currentRound.Letters[i].Location = Location.No;
-                }
-            }
-
-            for(int i = 0; i < currentRound.Letters.Length; i++)
-            {
-                var wordCount = wordArray.Count(o => o == currentRound.Letters[i].Text);
-                var guessCount = currentRound.Letters.Count(o => o.Text == currentRound.Letters[i].Text);
-                var foundCount = currentRound.Letters.Count(t => t.Text == currentRound.Letters[i].Text && t.Location == Location.Yes);
-
-                if(guessCount > 1)
-                { 
-                    if(Word.Contains(currentRound.Letters[i].Text))
-                    {
-                        if(currentRound.Letters[i].Text == wordArray[i])
-                        {
-                            currentRound.Letters[i].Location = Location.Yes;
-                        }
-                        else
-                        {
-                            if(wordCount == foundCount)
-                            {
-                                currentRound.Letters[i].Location = Location.No;
-                            }
-                            else
-                            {
-                                currentRound.Letters[i].Location = Location.Contains;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        currentRound.Letters[i].Location = Location.No;
-                    }
-                }
-            }
-
-            GuessWord = "";
-
-            Finished = Turn >= Rounds.Count - 1 || Rounds[Turn].Score == 5;
-
-            // increase turn
-            Turn++;
-        }
-
-        public void SetLetter(int index, string letter)
-        {
-            var currentRound = Rounds.Skip(Turn).First();
-            currentRound.Letters[index].Text = letter.ToUpper();
-        }
-
-        public void DeleteLetter(int index)
-        {
-            var currentRound = Rounds.Skip(Turn).First();
-            currentRound.Letters[index].Text = "";
-        }
-    }
-
+    [Inject]
+    public IWordService WordService { get; set; }
     private Wordle game = new Wordle();
     public string msg = "";
     int clicks = 0;
@@ -142,20 +19,7 @@
 
     public async Task Setup()
     {
-        string text = "";
-        try
-        {
-            text = await Http.GetStringAsync($"Wordles.txt");
-        }
-        catch
-        {
-            text = $"cigar\nrebut\nsissy\nhumph\nawake\nblush\nfocal\nevade\nnaval\nserve\n" +
-            "heath\ndwarf\nmodel\nkarma\nstink\ngrade\nquiet\nbench\nabate\nfeign\nmajor\n" +
-            "death\nfresh\ncrust\nstool\ncolon\nabase\nmarry\nreact\nbatty\npride\nfloss\n" +
-            "helix\ncroak\nstaff\npaper\nunfed\nwhelp\ntrawl\noutdo\nadobe\ncrazy\nsower\n" +
-            "repay\ndigit\ncrate\ncluck\nspike\nmimic\npound";
-        }
-        var words = text.Split(new string[] {"\n", "\r\n"}, StringSplitOptions.RemoveEmptyEntries);
+        var words = await WordService.GetWords();
         msg = "";
         clicks = 0;
         guesses = new List<string>();

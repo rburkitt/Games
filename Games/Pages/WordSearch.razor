@@ -1,9 +1,12 @@
 ﻿@page "/wordsearch"
-@inject HttpClient Http
 
 @using System.Collections.Generic;
+@using Games.Services
 
 @code {
+    [Inject]
+    public IWordService WordService { get; set; }
+
     private string[] wordList;
     private wordSearch theGameW;
     private bool HidePuzzle { get; set; } = false;
@@ -20,20 +23,9 @@
     public async Task Setup()
     {
         Random rnd = new Random();
-        string text = "";
-        try
-        {
-            text = await Http.GetStringAsync($"Wordles.txt");
-        }
-        catch
-        {
-            text = $"cigar\nrebut\nsissy\nhumph\nawake\nblush\nfocal\nevade\nnaval\nserve\n" +
-            "heath\ndwarf\nmodel\nkarma\nstink\ngrade\nquiet\nbench\nabate\nfeign\nmajor\n" +
-            "death\nfresh\ncrust\nstool\ncolon\nabase\nmarry\nreact\nbatty\npride\nfloss\n" +
-            "helix\ncroak\nstaff\npaper\nunfed\nwhelp\ntrawl\noutdo\nadobe\ncrazy\nsower\n" +
-            "repay\ndigit\ncrate\ncluck\nspike\nmimic\npound";
-        }
-        wordList = text.Split(new string[] {"\n", "\r\n"}, StringSplitOptions.RemoveEmptyEntries);
+
+        wordList = await WordService.GetWords();
+
         HidePuzzle = false;
         HideSolution = true;
 

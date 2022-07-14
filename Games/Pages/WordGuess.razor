@@ -8,6 +8,7 @@
     [Inject]
     public IWordService WordService { get; set; }
     private Wordle game = new Wordle();
+    private string[] words;
     public string msg = "";
     int clicks = 0;
     List<string> guesses = new List<string>();
@@ -20,7 +21,10 @@
 
     public async Task Setup()
     {
-        var words = await WordService.GetWords();
+        if (words == null || words.Length == 0)
+        {
+            words = await WordService.GetWords();
+        }
         msg = "";
         clicks = 0;
         guesses = new List<string>();

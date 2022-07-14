@@ -8,6 +8,8 @@
 
     public class WordService : IWordService
     {
+        private string[] words;
+
         private HttpClient httpClient;
         public WordService(HttpClient httpClient)
         {
@@ -34,12 +36,12 @@
 
         public async Task<string[]> GetWords()
         {
-            string[] words;
+            if (words == null || words.Length == 0)
+            {
+                string text = await Get();
 
-            string text = await Get();
-
-            words = text.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-
+                words = text.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            }
             return words;
         }
     }

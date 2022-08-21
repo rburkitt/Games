@@ -16,4 +16,8 @@ builder.Services.AddHttpClient<IWordService, WordService>(client =>
 
 builder.Services.AddSingleton<IWordService, WordService>();
 
+builder.Services.AddSingleton<WordSearchStateContainerService>();
+
+builder.Services.AddSingleton<WordGuessStateContainerService>();
+
 await builder.Build().RunAsync();

@@ -7,18 +7,31 @@
         public string GuessWord { get; set; } = "";
         public bool Finished { get; set; } = false;
 
-        public List<Round> Rounds = new List<Round>() { new Round(), new Round(), new Round(), new Round(), new Round(), new Round() };
+        public List<Round> Rounds = new() { new Round(), new Round(), new Round(), new Round(), new Round(), new Round() };
+
+        public string Msg = "";
+        public int Clicks = 0;
+        public List<string> Guesses = new();
+        public bool Update = false;
 
         public Wordle()
         {
             Turn = 0;
+            Msg = "";
+            Clicks = 0;
+            Guesses = new List<string>();
+            Update = false;
         }
 
         public Wordle(string[] words)
         {
-            Random rnd = new Random();
+            Random rnd = new();
             Word = words[rnd.Next(words.Length)].Trim().ToUpper();
             Turn = 0;
+            Msg = "";
+            Clicks = 0;
+            Guesses = new List<string>();
+            Update = false;
         }
 
         public void Guess()

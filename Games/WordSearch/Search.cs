@@ -1,34 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Games.WordSearch
+﻿namespace Games.WordSearch
 {
-    public class Word
-    {
-        public string Text { get; set; }
-
-    }
     public class Search
     {
-        public string[,] puzzle;
-        public List<string> found;
-        public string[,] solution;
+        public string[,] Puzzle;
+        public List<string> Found;
+        public string[,] Solution;
+
+        public bool HidePuzzle { get; set; } = false;
+        public bool HideSolution { get; set; } = true;
+        public string[,] BgColor = new string[10, 10];
+        public string[] Finds;
+        public int Find = 0;
 
         public Search(List<string> theWords, int height = 10, int width = 10)
         {
-            Random rnd = new Random();
-            found = new List<string>();
+            Random rnd = new();
+            Found = new List<string>();
 
             string fill = "abcdefghijklmnopqrstuvwxyz";
-            puzzle = new string[height, width];
-            solution = new string[height, width];
+            Puzzle = new string[height, width];
+            Solution = new string[height, width];
 
-            for (int r = 0; r < puzzle.GetLength(0); r++)
+            for (int r = 0; r < Puzzle.GetLength(0); r++)
             {
-                for (int c = 0; c < puzzle.GetLength(1); c++)
+                for (int c = 0; c < Puzzle.GetLength(1); c++)
                 {
-                    puzzle[r, c] = "*";
-                    solution[r, c] = "*";
+                    Puzzle[r, c] = "*";
+                    Solution[r, c] = "*";
                 }
             }
 
@@ -39,7 +37,7 @@ namespace Games.WordSearch
                 int dir = rnd.Next(0, 3);
                 int fwd = rnd.Next(0, 2);
 
-                while (fwd == 0 && (row + theWords[k].Length > puzzle.GetLength(0) || col + theWords[k].Length > puzzle.GetLength(1)) || fwd == 1 && (row - theWords[k].Length < 0 || col - theWords[k].Length < 0))//check for out of bounds
+                while (fwd == 0 && (row + theWords[k].Length > Puzzle.GetLength(0) || col + theWords[k].Length > Puzzle.GetLength(1)) || fwd == 1 && (row - theWords[k].Length < 0 || col - theWords[k].Length < 0))//check for out of bounds
                 {
                     row = rnd.Next(0, height);
                     col = rnd.Next(0, width);
@@ -47,11 +45,11 @@ namespace Games.WordSearch
 
                 if (Check(fwd, dir, row, col, theWords[k]))
                 {
-                    found.Add(theWords[k]);
+                    Found.Add(theWords[k]);
                     for (int m = 0; m < theWords[k].Length; m++)//add each word's characters
                     {
-                        puzzle[row, col] = theWords[k].Substring(m, 1);
-                        solution[row, col] = theWords[k].Substring(m, 1);
+                        Puzzle[row, col] = theWords[k].Substring(m, 1);
+                        Solution[row, col] = theWords[k].Substring(m, 1);
 
                         if (dir == 0)
                             Increment(fwd, ref row);
@@ -70,12 +68,29 @@ namespace Games.WordSearch
             {
                 for (int c = 0; c < width; c++)
                 {
-                    if (puzzle[r, c].Equals("*"))
+                    if (Puzzle[r, c].Equals("*"))
                     {
                         int spot = rnd.Next(0, 26);
-                        puzzle[r, c] = fill.Substring(spot, 1);
+                        Puzzle[r, c] = fill.Substring(spot, 1);
                     }
                 }
+            }
+
+            HidePuzzle = false;
+            HideSolution = true;
+
+            for (int r = 0; r < BgColor.GetLength(0); r++)
+            {
+                for (int c = 0; c < BgColor.GetLength(1); c++)
+                {
+                    BgColor[r, c] = "00f";
+                }
+            }
+
+            Finds = new string[Found.Count];
+            for (int i = 0; i < Found.Count; i++)
+            {
+                Finds[i] = "";
             }
         }
 
@@ -95,7 +110,7 @@ namespace Games.WordSearch
                 {
                     for (int r = row; r < row + word.Length; r++)
                     {
-                        if (!puzzle[r, col].Equals("*"))
+                        if (!Puzzle[r, col].Equals("*"))
                         {
                             return false;
                         }
@@ -105,7 +120,7 @@ namespace Games.WordSearch
                 {
                     for (int c = col; c < col + word.Length; c++)
                     {
-                        if (!puzzle[row, c].Equals("*"))
+                        if (!Puzzle[row, c].Equals("*"))
                         {
                             return false;
                         }
@@ -117,7 +132,7 @@ namespace Games.WordSearch
                     {
                         for (int c = col; c < col + word.Length; c++)
                         {
-                            if (!puzzle[r, c].Equals("*"))
+                            if (!Puzzle[r, c].Equals("*"))
                             {
                                 return false;
                             }
@@ -131,7 +146,7 @@ namespace Games.WordSearch
                 {
                     for (int r = row; r >= row - word.Length; r--)
                     {
-                        if (!puzzle[r, col].Equals("*"))
+                        if (!Puzzle[r, col].Equals("*"))
                         {
                             return false;
                         }
@@ -141,7 +156,7 @@ namespace Games.WordSearch
                 {
                     for (int c = col; c >= col - word.Length; c--)
                     {
-                        if (!puzzle[row, c].Equals("*"))
+                        if (!Puzzle[row, c].Equals("*"))
                         {
                             return false;
                         }
@@ -153,7 +168,7 @@ namespace Games.WordSearch
                     {
                         for (int c = col; c >= col - word.Length; c--)
                         {
-                            if (!puzzle[r, c].Equals("*"))
+                            if (!Puzzle[r, c].Equals("*"))
                             {
                                 return false;
                             }

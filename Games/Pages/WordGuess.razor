@@ -4,51 +4,50 @@
 @using Games.WordGuess
 @using Games.Services
 
+@inject WordGuessStateContainerService stateService;
+
 @code {
     [Inject]
     public IWordService WordService { get; set; }
     private Wordle game = new Wordle();
-    private string[] words;
-    public string msg = "";
-    int clicks = 0;
-    List<string> guesses = new List<string>();
-    bool update = false;
+    private string[] words = new string[] { };
 
     protected override async Task OnInitializedAsync()
-    {        
-        await Setup();
+    {
+        await Setup(false);
     }
 
-    public async Task Setup()
+    public async Task Setup(bool newGame = false)
     {
         if (words == null || words.Length == 0)
         {
             words = await WordService.GetWords();
-        }
-        msg = "";
-        clicks = 0;
-        guesses = new List<string>();
-        update = false;
+        }        
 
-        game = new Wordle(words);
+        if (string.IsNullOrEmpty(stateService.Value.Word) || newGame)
+        {
+            stateService.SetValue(new Wordle(words));
+        }
+        
+        game = stateService.Value;
     }  
 
     public void Guess()
     {
-        if (clicks < 5) return;
+        if (game.Clicks < 5) return;
 
-        msg = "";
+        game.Msg = "";
         try
         {
             game.Guess();            
         }
         catch(Exception ex)
         {
-            msg = ex.Message;
+            game.Msg = ex.Message;
         }
 
-        clicks = 0;
-        update = true;
+        game.Clicks = 0;
+        game.Update = true;
     }
 
     public string GetColor(Letter letter)
@@ -112,7 +111,7 @@
             retVal = GetColor(i, letter, retVal);
         }
 
-        if (update)
+        if (game.Update)
         {
             retVal = GetColor(game.Turn - 1, letter, retVal);            
         }
@@ -137,29 +136,29 @@
 
     public void SetLetter(string letter)
     {
-        update = true;
+        game.Update = true;
 
-        if (clicks == 5) return;
+        if (game.Clicks == 5) return;
 
-        guesses.Add(letter);
-        game.SetLetter(clicks, letter);
+        game.Guesses.Add(letter);
+        game.SetLetter(game.Clicks, letter);
 
-        if (clicks < 5)
-            clicks++;
+        if (game.Clicks < 5)
+            game.Clicks++;
     }
 
     public void DeleteLetter()
     {
-        if (clicks == 0) return;
+        if (game.Clicks == 0) return;
 
-        game.DeleteLetter(clicks-1);
+        game.DeleteLetter(game.Clicks-1);
 
-        if(guesses.Any())
-            guesses.RemoveAt(clicks-1);
+        if(game.Guesses.Any())
+            game.Guesses.RemoveAt(game.Clicks-1);
 
-        clicks--;
+        game.Clicks--;
 
-        update = true;
+        game.Update = true;
     }
 }
 
@@ -213,9 +212,9 @@
 
     <div class="controls">
         <button class="btn btn-outline-primary rounded" @onclick="@Guess" disabled="@game.Finished">Guess</button>
-        <button class="btn btn-outline-secondary rounded" @onclick="@Setup">New</button>
+        <button class="btn btn-outline-secondary rounded" @onclick="(e => Setup(true))">New</button>
         <label>@(Finished())</label>
-        <label>@msg</label>
+        <label>@game.Msg</label>
     </div>
 
 </div>

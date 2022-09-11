@@ -6,7 +6,6 @@
 @using Games.WordGuess;
 @using Games.Services;
 
-@inject WordGuessStateContainerService stateService;
 @inject Blazored.LocalStorage.ILocalStorageService localStorage;
 
 @code {
@@ -28,25 +27,20 @@
             words = await WordService.GetWords();
         }        
 
-        if (string.IsNullOrEmpty(stateService.Value.Word) || newGame)
+        var inLocalStorage = await localStorage.ContainKeyAsync(localStorageLabel);
+
+        if (inLocalStorage && !newGame)
         {
-            var inLocalStorage = await localStorage.ContainKeyAsync(localStorageLabel);
-
-            if (inLocalStorage && !newGame)
-            {
-                stateService.SetValue(await localStorage.GetItemAsync<Wordle>(localStorageLabel));
-            }
-            else
-            {
-                stateService.SetValue(new Wordle());
-
-                stateService.Value.Setup(words);
-
-                await localStorage.SetItemAsync(localStorageLabel, stateService.Value);
-            }
+            game = await localStorage.GetItemAsync<Wordle>(localStorageLabel);
         }
+        else
+        {
+            game = new Wordle();
 
-        game = stateService.Value;
+            game.Setup(words);
+
+            await localStorage.SetItemAsync(localStorageLabel, game);
+        }
     }  
 
     public void Guess()
@@ -180,7 +174,7 @@
 
     public async ValueTask DisposeAsync()
     {
-        await localStorage.SetItemAsync(localStorageLabel, stateService.Value);
+        await localStorage.SetItemAsync(localStorageLabel, game);
     }
 }
 

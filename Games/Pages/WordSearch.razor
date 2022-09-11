@@ -6,7 +6,6 @@
 @using Games.WordSearch
 @using Games.Services
 
-@inject WordSearchStateContainerService stateService;
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 @code {
@@ -26,25 +25,20 @@
     {
         wordList = await WordService.GetWords();
 
-        if (stateService.Value.Found.Count == 0 || newGame)
+        var inLocalStorage = await localStorage.ContainKeyAsync(localStorageLabel);
+
+        if (inLocalStorage && !newGame)
         {
-            var inLocalStorage = await localStorage.ContainKeyAsync(localStorageLabel);
-
-            if (inLocalStorage && !newGame)
-            {
-                stateService.SetValue(await localStorage.GetItemAsync<Search>(localStorageLabel));
-            }
-            else
-            {
-                stateService.SetValue(new Search());
-
-                stateService.Value.Setup(wordList.OrderBy(o => System.Guid.NewGuid().ToString()).Take(15).ToList(), 10, 10);
-
-                await localStorage.SetItemAsync(localStorageLabel, stateService.Value);
-            }
+            theGameW = await localStorage.GetItemAsync<Search>(localStorageLabel);
         }
+        else
+        {
+            theGameW = new Search();
 
-        theGameW = stateService.Value;
+            theGameW.Setup(wordList.OrderBy(o => System.Guid.NewGuid().ToString()).Take(15).ToList(), 10, 10);
+
+            await localStorage.SetItemAsync(localStorageLabel, theGameW);
+        }
     }
 
     public void Solve()
@@ -79,7 +73,7 @@
 
     public async ValueTask DisposeAsync()
     {
-        await localStorage.SetItemAsync(localStorageLabel, stateService.Value);
+        await localStorage.SetItemAsync(localStorageLabel, theGameW);
     }
 }
 

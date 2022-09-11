@@ -7,7 +7,7 @@ namespace Games.Services
         /// <summary>
         /// The State property with initial value
         /// </summary>
-        public Search Value { get; set; } = new Search(new List<string>(), 10, 10);
+        public Search Value { get; set; } = new Search();
         /// <summary>
         /// The event that will be raised for state changed
         /// </summary>

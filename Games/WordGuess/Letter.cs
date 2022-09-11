@@ -10,7 +10,18 @@
 
     public class Letter
     {
-        public string Text { get; set; } = "";
-        public Location Location { get; set; } = Location.Empty;
+        public string Text { get; set; }
+        public Location Location { get; set; }
+
+        public Letter()
+        {
+            Text = "";
+            Location = Location.Empty;
+        }
+        public Letter(string text, Location location)
+        {
+            Text = text;
+            Location = location;
+        }
     }
 }

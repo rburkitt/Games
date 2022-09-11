@@ -2,28 +2,45 @@
 {
     public class Wordle
     {
-        public string Word { get; set; } = "";
-        public int Turn { get; set; } = 0;
-        public string GuessWord { get; set; } = "";
-        public bool Finished { get; set; } = false;
+        public string Word { get; set; }
+        public int Turn { get; set; }
+        public string GuessWord { get; set; }
+        public bool Finished { get; set; }
 
-        public List<Round> Rounds = new() { new Round(), new Round(), new Round(), new Round(), new Round(), new Round() };
+        public List<Round> Rounds { get; set; }
 
-        public string Msg = "";
-        public int Clicks = 0;
-        public List<string> Guesses = new();
-        public bool Update = false;
+        public string Msg { get; set; }
+        public int Clicks { get; set; }
+        public List<string> Guesses { get; set; }
+        public bool Update { get; set; }
 
         public Wordle()
         {
+            Word = "";
             Turn = 0;
+            GuessWord = "";
+            Finished = false;
+            Rounds = new() { new Round(), new Round(), new Round(), new Round(), new Round(), new Round() };
             Msg = "";
             Clicks = 0;
-            Guesses = new List<string>();
+            Guesses = new();
             Update = false;
         }
 
-        public Wordle(string[] words)
+        public Wordle(string word, int turn, string guessWord, bool finished, List<Round> rounds, string msg, int clicks, List<string> guesses, bool update)
+        {
+            Word = word;
+            Turn = turn;
+            GuessWord = guessWord;
+            Finished = finished;
+            Rounds = rounds;
+            Msg = msg;
+            Clicks = clicks;
+            Guesses = guesses;
+            Update = update;
+        }
+
+        public void Setup(string[] words)
         {
             Random rnd = new();
             Word = words[rnd.Next(words.Length)].Trim().ToUpper();

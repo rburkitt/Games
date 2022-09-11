@@ -1,16 +1,20 @@
 @page "/wordguess"
 
+@implements IAsyncDisposable;
+
 @using System.Collections.Generic;
-@using Games.WordGuess
-@using Games.Services
+@using Games.WordGuess;
+@using Games.Services;
 
 @inject WordGuessStateContainerService stateService;
+@inject Blazored.LocalStorage.ILocalStorageService localStorage;
 
 @code {
     [Inject]
     public IWordService WordService { get; set; }
     private Wordle game = new Wordle();
     private string[] words = new string[] { };
+    private const string localStorageLabel = "wordGuess";
 
     protected override async Task OnInitializedAsync()
     {
@@ -26,9 +30,22 @@
 
         if (string.IsNullOrEmpty(stateService.Value.Word) || newGame)
         {
-            stateService.SetValue(new Wordle(words));
+            var inLocalStorage = await localStorage.ContainKeyAsync(localStorageLabel);
+
+            if (inLocalStorage && !newGame)
+            {
+                stateService.SetValue(await localStorage.GetItemAsync<Wordle>(localStorageLabel));
+            }
+            else
+            {
+                stateService.SetValue(new Wordle());
+
+                stateService.Value.Setup(words);
+
+                await localStorage.SetItemAsync(localStorageLabel, stateService.Value);
+            }
         }
-        
+
         game = stateService.Value;
     }  
 
@@ -159,6 +176,11 @@
         game.Clicks--;
 
         game.Update = true;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await localStorage.SetItemAsync(localStorageLabel, stateService.Value);
     }
 }
 

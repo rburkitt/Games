@@ -1,17 +1,21 @@
 ﻿@page "/wordsearch"
 
+@implements IAsyncDisposable;
+
 @using System.Collections.Generic;
 @using Games.WordSearch
 @using Games.Services
 
 @inject WordSearchStateContainerService stateService;
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 @code {
     [Inject]
     public IWordService WordService { get; set; }
 
     private string[] wordList = new string[] {};
-    private Search theGameW = new Search(new List<string>(), 10, 10);
+    private Search theGameW = new Search();
+    private const string localStorageLabel = "wordSearch";
 
     protected override async Task OnInitializedAsync()
     {        
@@ -20,14 +24,27 @@
 
     public async Task Setup(bool newGame = false)
     {
-        wordList = await WordService.GetWords();        
+        wordList = await WordService.GetWords();
 
         if (stateService.Value.Found.Count == 0 || newGame)
         {
-            stateService.SetValue(new Search(wordList.OrderBy(o => System.Guid.NewGuid().ToString()).Take(15).ToList(), 10, 10));
+            var inLocalStorage = await localStorage.ContainKeyAsync(localStorageLabel);
+
+            if (inLocalStorage && !newGame)
+            {
+                stateService.SetValue(await localStorage.GetItemAsync<Search>(localStorageLabel));
+            }
+            else
+            {
+                stateService.SetValue(new Search());
+
+                stateService.Value.Setup(wordList.OrderBy(o => System.Guid.NewGuid().ToString()).Take(15).ToList(), 10, 10);
+
+                await localStorage.SetItemAsync(localStorageLabel, stateService.Value);
+            }
         }
-        
-        theGameW = stateService.Value;        
+
+        theGameW = stateService.Value;
     }
 
     public void Solve()
@@ -38,13 +55,13 @@
 
     public void Highlight(int r, int c)
     {
-        if (theGameW.BgColor[r, c] == "00f")
+        if (theGameW.BgColor.First(o => o.X == r && o.Y == c).Value == "00f")
         {
-            theGameW.BgColor[r, c] = "#fd7";
+            theGameW.BgColor.First(o => o.X == r && o.Y == c).Value = "#fd7";
         }
         else
         {
-            theGameW.BgColor[r, c] = "00f";
+            theGameW.BgColor.First(o => o.X == r && o.Y == c).Value = "00f";
         }
     }
 
@@ -58,7 +75,12 @@
         {
             theGameW.Finds[index] = "";
         }
-    }    
+    }   
+
+    public async ValueTask DisposeAsync()
+    {
+        await localStorage.SetItemAsync(localStorageLabel, stateService.Value);
+    }
 }
 
 <div class="container">
@@ -82,14 +104,14 @@
             <table>
                 @if (theGameW != null)
                 {
-                    for (int r = 0; r < theGameW.Puzzle.GetLength(0); r++)//print puzzle
+                    for (int r = 0; r < theGameW.Height; r++)//print puzzle
                     {
                         var local_r = r;
                         <tr>
-                            @for (int c = 0; c < theGameW.Puzzle.GetLength(1); c++)
+                            @for (int c = 0; c < theGameW.Width; c++)
                             {
                                 var local_c = c;
-                                <td style="width: 25px; text-align: center;background-color:@theGameW.BgColor[r,c]" @onclick="(e => Highlight(local_r, local_c))">@theGameW.Puzzle[r, c]</td>
+                                <td style="width: 25px; text-align: center;background-color:@theGameW.BgColor.First(o => o.X == r && o.Y == c).Value" @onclick="(e => Highlight(local_r, local_c))">@theGameW.Puzzle.First(o => o.X == r && o.Y == c).Value</td>
                             }
                         </tr>
                     }
@@ -100,12 +122,12 @@
             <table>
                 @if (theGameW != null)
                 {
-                    for (int r = 0; r < theGameW.Solution.GetLength(0); r++)//print solution
+                    for (int r = 0; r < theGameW.Height; r++)//print solution
                     {
                         <tr>
-                            @for (int c = 0; c < theGameW.Solution.GetLength(1); c++)
+                            @for (int c = 0; c < theGameW.Width; c++)
                             {
-                                <td style="width: 25px; text-align: center;">@theGameW.Solution[r, c]</td>
+                                <td style="width: 25px; text-align: center;">@theGameW.Solution.First(o => o.X == r && o.Y == c).Value</td>
                             }
                         </tr>
                     }

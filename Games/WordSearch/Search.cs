@@ -1,55 +1,95 @@
 ﻿namespace Games.WordSearch
 {
+    public class Coordinate
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+
+        public string Value { get; set; } = "";
+    }
     public class Search
     {
-        public string[,] Puzzle;
-        public List<string> Found;
-        public string[,] Solution;
+        public List<Coordinate> Puzzle { get; set; }
+        public List<string> Found { get; set; }
+        public List<Coordinate> Solution { get; set; }
 
         public bool HidePuzzle { get; set; } = false;
         public bool HideSolution { get; set; } = true;
-        public string[,] BgColor = new string[10, 10];
-        public string[] Finds;
-        public int Find = 0;
+        public List<Coordinate> BgColor { get; set; } = new();
+        public string[] Finds { get; set; }
+        public int Find { get; set; } = 0;
+        public List<string> TheWords { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
 
-        public Search(List<string> theWords, int height = 10, int width = 10)
+        public Search()
         {
+            Found = new List<string>();
+            Finds = new string[Found.Count];
+            Puzzle = new List<Coordinate>();
+            Solution = new List<Coordinate>();
+            TheWords = new List<string>();
+        }
+        public Search(List<Coordinate> puzzle, List<string> found, List<Coordinate> solution, bool hidePuzzle, bool hideSolution, List<Coordinate> bgColor, string[] finds, int find, List<string> theWords, int height, int width)
+        {
+            Puzzle = puzzle;
+            Found = found;
+            Solution = solution;
+            HidePuzzle = hidePuzzle;
+            HideSolution = hideSolution;
+            BgColor = bgColor;
+            Finds = finds;
+            Find = find;
+            TheWords = theWords;
+            Height = height;
+            Width = width;
+
+            Setup(theWords, height, width);
+        }
+
+        public void Setup(List<string> theWords, int height = 10, int width = 10)
+        {
+            TheWords = theWords;
+            Height = height;
+            Width = width;
+
             Random rnd = new();
             Found = new List<string>();
 
             string fill = "abcdefghijklmnopqrstuvwxyz";
-            Puzzle = new string[height, width];
-            Solution = new string[height, width];
+            Puzzle = new List<Coordinate>();
+            Solution = new List<Coordinate>();
 
-            for (int r = 0; r < Puzzle.GetLength(0); r++)
+            for (int r = 0; r < Height; r++)
             {
-                for (int c = 0; c < Puzzle.GetLength(1); c++)
+                for (int c = 0; c < Width; c++)
                 {
-                    Puzzle[r, c] = "*";
-                    Solution[r, c] = "*";
+                    Puzzle.Add(new Coordinate { X = r, Y = c, Value = "*" });
+                    Solution.Add(new Coordinate { X = r, Y = c, Value = "*" });
+                    BgColor.Add(new Coordinate { X = r, Y = c, Value = "00f" });
                 }
             }
 
-            for (int k = 0; k < theWords.Count; k++)
+            for (int k = 0; k < TheWords.Count; k++)
             {
-                int row = rnd.Next(0, height);
-                int col = rnd.Next(0, width);
+                int row = rnd.Next(0, Height);
+                int col = rnd.Next(0, Width);
                 int dir = rnd.Next(0, 3);
                 int fwd = rnd.Next(0, 2);
 
-                while (fwd == 0 && (row + theWords[k].Length > Puzzle.GetLength(0) || col + theWords[k].Length > Puzzle.GetLength(1)) || fwd == 1 && (row - theWords[k].Length < 0 || col - theWords[k].Length < 0))//check for out of bounds
+                while (fwd == 0 && (row + theWords[k].Length > Height || col + theWords[k].Length > Height) || fwd == 1 && (row - theWords[k].Length < 0 || col - theWords[k].Length < 0))//check for out of bounds
                 {
-                    row = rnd.Next(0, height);
-                    col = rnd.Next(0, width);
+                    row = rnd.Next(0, Height);
+                    col = rnd.Next(0, Width);
                 }
 
-                if (Check(fwd, dir, row, col, theWords[k]))
+                if (Check(fwd, dir, row, col, TheWords[k]))
                 {
-                    Found.Add(theWords[k]);
-                    for (int m = 0; m < theWords[k].Length; m++)//add each word's characters
+                    Found.Add(TheWords[k]);
+                    for (int m = 0; m < TheWords[k].Length; m++)//add each word's characters
                     {
-                        Puzzle[row, col] = theWords[k].Substring(m, 1);
-                        Solution[row, col] = theWords[k].Substring(m, 1);
+                        Puzzle.First(o => o.X == row && o.Y == col).Value = TheWords[k].Substring(m, 1);
+                        Solution.First(o => o.X == row && o.Y == col).Value = TheWords[k].Substring(m, 1);
 
                         if (dir == 0)
                             Increment(fwd, ref row);
@@ -64,28 +104,10 @@
                 }
             }
 
-            for (int r = 0; r < height; r++)//fill empty spots
-            {
-                for (int c = 0; c < width; c++)
-                {
-                    if (Puzzle[r, c].Equals("*"))
-                    {
-                        int spot = rnd.Next(0, 26);
-                        Puzzle[r, c] = fill.Substring(spot, 1);
-                    }
-                }
-            }
+            Puzzle.Where(o => o.Value == "*").Select(o => o.Value = fill.Substring(rnd.Next(0, 26), 1)).ToList();
 
             HidePuzzle = false;
             HideSolution = true;
-
-            for (int r = 0; r < BgColor.GetLength(0); r++)
-            {
-                for (int c = 0; c < BgColor.GetLength(1); c++)
-                {
-                    BgColor[r, c] = "00f";
-                }
-            }
 
             Finds = new string[Found.Count];
             for (int i = 0; i < Found.Count; i++)
@@ -110,7 +132,8 @@
                 {
                     for (int r = row; r < row + word.Length; r++)
                     {
-                        if (!Puzzle[r, col].Equals("*"))
+                        var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == col);
+                        if (item != null && !item.Value.Equals("*"))
                         {
                             return false;
                         }
@@ -120,7 +143,8 @@
                 {
                     for (int c = col; c < col + word.Length; c++)
                     {
-                        if (!Puzzle[row, c].Equals("*"))
+                        var item = Puzzle.FirstOrDefault(o => o.X == row && o.Y == c);
+                        if (item != null && !item.Value.Equals("*"))
                         {
                             return false;
                         }
@@ -132,7 +156,8 @@
                     {
                         for (int c = col; c < col + word.Length; c++)
                         {
-                            if (!Puzzle[r, c].Equals("*"))
+                            var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == c);
+                            if (item != null && !item.Value.Equals("*"))
                             {
                                 return false;
                             }
@@ -146,7 +171,8 @@
                 {
                     for (int r = row; r >= row - word.Length; r--)
                     {
-                        if (!Puzzle[r, col].Equals("*"))
+                        var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == col);
+                        if (item != null && !item.Value.Equals("*"))
                         {
                             return false;
                         }
@@ -156,7 +182,8 @@
                 {
                     for (int c = col; c >= col - word.Length; c--)
                     {
-                        if (!Puzzle[row, c].Equals("*"))
+                        var item = Puzzle.FirstOrDefault(o => o.X == row && o.Y == c);
+                        if (item != null && !item.Value.Equals("*"))
                         {
                             return false;
                         }
@@ -168,7 +195,8 @@
                     {
                         for (int c = col; c >= col - word.Length; c--)
                         {
-                            if (!Puzzle[r, c].Equals("*"))
+                            var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == c);
+                            if (item != null && !item.Value.Equals("*"))
                             {
                                 return false;
                             }

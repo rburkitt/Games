@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Games;
 using Games.Services;
 using Microsoft.AspNetCore.Components.Web;
@@ -19,5 +20,7 @@ builder.Services.AddSingleton<IWordService, WordService>();
 builder.Services.AddSingleton<WordSearchStateContainerService>();
 
 builder.Services.AddSingleton<WordGuessStateContainerService>();
+
+builder.Services.AddBlazoredLocalStorage();
 
 await builder.Build().RunAsync();

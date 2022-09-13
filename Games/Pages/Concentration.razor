@@ -4,6 +4,8 @@
 @using System.Collections.Generic
 @using System.Linq
 
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
 @code {
     public class Card
     {
@@ -25,6 +27,11 @@
     {
         faces.AddRange(faces);
         DealCards();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await localStorage.SetItemAsync("lastPage", "concentration");
     }
 
     public void DealCards()

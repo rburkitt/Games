@@ -21,6 +21,11 @@
         await Setup(false);
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await localStorage.SetItemAsync("lastPage", "wordSearch");
+    }
+
     public async Task Setup(bool newGame = false)
     {
         wordList = await WordService.GetWords();

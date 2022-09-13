@@ -20,6 +20,11 @@
         await Setup(false);
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await localStorage.SetItemAsync("lastPage", "wordGuess");
+    }
+
     public async Task Setup(bool newGame = false)
     {
         if (words == null || words.Length == 0)

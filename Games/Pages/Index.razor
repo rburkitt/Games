@@ -1,87 +1,8 @@
 ﻿@page "/"
 
-@using Blazor.Extensions; 
-@using Blazor.Extensions.Canvas
-@using Blazor.Extensions.Canvas.Canvas2D;
-@using System.Drawing
-
-<style>
-    canvas {
-        vertical-align: bottom;
-        border: 1px solid #6f42c1
-    ;}
-</style>
-
 <PageTitle>Games</PageTitle>
 
 <h1>MyGames</h1>
 
-<BECanvas Width="300" Height="400" @ref="_canvasReference"></BECanvas>
+Welcome to my games.
 
-@code {
-    private Canvas2DContext _context;
-
-    protected BECanvasComponent _canvasReference;
-
-    private int II = 0;
-    private int i = 0;
-
-    private double[] xs;
-    private double[] ys;
-    private int level = 0;
-    private int maxlevel = 10;
-    private double da = 0.785398; //45;
-
-    private double shrink = 0.67;
-    private double a = 3.14159 * 0.5;
-    private double l = 80;
-
-    private double x = 140;
-    private double y = 300;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        this._context = await this._canvasReference.CreateCanvas2DAsync();
-
-        level = 0;
-        maxlevel = 10;
-
-        xs = new double[maxlevel];
-        ys = new double[maxlevel];
-
-        await DrawSingleBranch();
-    }
-
-    private async ValueTask DrawSingleBranch()
-    {
-        var dx = l * Math.Cos(a);
-        var dy = l * Math.Sin(a);
-        var nx = x + dx;
-        var ny = y - dy;        
-
-        await _context.MoveToAsync(x, y);
-        await _context.LineToAsync(nx, ny);
-        await this._context.StrokeAsync();
-        await this._context.SetStrokeStyleAsync("#6f42c1");
-
-        xs[level] = x;
-        ys[level] = y;
-
-        x = nx;
-        y = ny;
-        level++;
-        a += da;
-        l = l * shrink;
-
-        if (level < maxlevel) await DrawSingleBranch();
-
-        a = a - da * 2;
-        if (level < maxlevel) await DrawSingleBranch();
-
-        a += da;
-        l = l / shrink;
-        level--;
-        x = xs[level];
-        y = ys[level];
-    }
-}

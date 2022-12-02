@@ -10,7 +10,7 @@
 
 @code {
     [Inject]
-    public IWordService WordService { get; set; }
+    public IWordService WordService { get; set; } = null!;
 
     private string[] wordList = new string[] {};
     private Search theGameW = new Search();

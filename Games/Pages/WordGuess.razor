@@ -10,7 +10,7 @@
 
 @code {
     [Inject]
-    public IWordService WordService { get; set; }
+    public IWordService WordService { get; set; } = null!;
     private Wordle game = new Wordle();
     private string[] words = new string[] { };
     private const string localStorageLabel = "wordGuess";

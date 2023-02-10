@@ -2,6 +2,7 @@
 {
     public class Wordle
     {
+        public string[] Words { get; set; }
         public string Word { get; set; }
         public int Turn { get; set; }
         public string GuessWord { get; set; }
@@ -42,6 +43,7 @@
 
         public void Setup(string[] words)
         {
+            Words = words;
             Random rnd = new();
             Word = words[rnd.Next(words.Length)].Trim().ToUpper();
             Turn = 0;
@@ -61,6 +63,11 @@
 
             if (currentRound.Letters.Any(o => o.Text == ""))
                 throw new Exception("Your guess must be 5 letters.");
+
+            string myGuess = string.Join("", currentRound.Letters.Select(o => o.Text).ToArray());
+
+            if(!Words.Contains(myGuess.ToLower()))
+                throw new Exception("Invalid Word, not in word list.");
 
             var wordArray = Word.ToCharArray().Select(c => c.ToString()).ToArray();
 

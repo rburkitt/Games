@@ -55,14 +55,14 @@
         game.Msg = "";
         try
         {
-            game.Guess();            
+            game.Guess();  
+            game.Clicks = 0;
         }
         catch(Exception ex)
         {
             game.Msg = ex.Message;
         }
-
-        game.Clicks = 0;
+        
         game.Update = true;
     }
 
@@ -235,7 +235,7 @@
         <button class="btn btn-outline-primary rounded" @onclick="@Guess" disabled="@game.Finished">Guess</button>
         <button class="btn btn-outline-secondary rounded" @onclick="(e => Setup(true))">New</button>
         <label>@(Finished())</label>
-        <label>@game.Msg</label>
+        <label class="text-danger">@game.Msg</label>
     </div>
 
 </div>

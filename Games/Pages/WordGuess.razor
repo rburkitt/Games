@@ -235,7 +235,7 @@
         <button class="btn btn-outline-primary rounded" @onclick="@Guess" disabled="@game.Finished">Guess</button>
         <button class="btn btn-outline-secondary rounded" @onclick="(e => Setup(true))">New</button>
         <label>@(Finished())</label>
-        <label class="text-danger">@game.Msg</label>
+        <label><small class="text-danger">@game.Msg</small></label>
     </div>
 
 </div>

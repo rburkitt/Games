@@ -3,30 +3,18 @@
 @using System
 @using System.Collections.Generic
 @using System.Linq
+@using Games.Concentration
 
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 @code {
-    public class Card
+    Pexeso game = new Pexeso();
+
+    private const string localStorageLabel = "concentration";
+
+    protected override async Task OnInitializedAsync()
     {
-        public string Value { get; set; } = null!;
-        public string Text { get; set; } = null!;
-        public bool IsEnabled { get; set; }
-    }
-
-    public List<Card> Cards = new List<Card>();
-
-    public List<string> faces = new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8" };
-
-    public Card Card1 { get; set; } = null!;
-    public Card Card2 { get; set; } = null!;
-
-    public int Flipped = 0;
-
-    protected override void OnInitialized()
-    {
-        faces.AddRange(faces);
-        DealCards();
+        await DealCards(false);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -34,72 +22,37 @@
         await localStorage.SetItemAsync("lastPage", "concentration");
     }
 
-    public void DealCards()
+    public async Task DealCards(bool newGame = false)
     {
-        Card1 = null;
-        Card2 = null;
-        Cards.Clear();
-        faces.OrderBy(a => Guid.NewGuid()).ToList().ForEach(o =>
+        var inLocalStorage = await localStorage.ContainKeyAsync(localStorageLabel);
+
+        if (inLocalStorage && !newGame)
         {
-            Cards.Add(new Card
-                {
-                    Value = o,
-                    Text = "",
-                    IsEnabled = false
-                });
-        });
-        Flipped = 0;
+            game = await localStorage.GetItemAsync<Pexeso>(localStorageLabel);
+        }
+        else
+        {
+            game = new Pexeso();
+
+            game.DealCards();
+
+            await localStorage.SetItemAsync(localStorageLabel, game);
+        }
     }
 
-    public void flipCard(Card card)
+    public async Task flipCard(Card card)
     {
-        if(card.Text == "")
-        {
-            card.Text = card.Value;
+        game.flipCard(card);
 
-            if(Card1 == null)
-            {
-                Card1 = card;
-            }
-            else if(Card2 == null && Card1 != card)
-            {
-                Card2 = card;
-
-            }
-            else if(Card1 != null && Card2 != null)
-            {
-                Card1.Text = "";
-                Card2.Text = "";
-                Card1 = card;
-                Card2 = null;
-            }
-
-            if(Card1 != null && Card2 != null)
-            {
-                if(Card1.Value == Card2.Value)
-                {
-                    Card1 = null;
-                    Card2 = null;
-
-                    Cards.Where(o => o.Text != "")
-                    .GroupBy(x => x.Text)
-                    .Where(o => o.Count() > 1).ToList()
-                    .ForEach(o =>
-                    {
-                        o.ToList().ForEach(c => c.IsEnabled = true);
-                    });
-                }
-                Flipped++;
-            }
-        }
+        await localStorage.SetItemAsync(localStorageLabel, game);
     }
 }
 
     <div class="gameContainer">
         <div id="stack">
-            @foreach (var card in Cards)
+            @foreach (var card in game.Cards)
             {
-            <button disabled="@(card.IsEnabled)" @onclick="(e => flipCard(card))">
+            <button disabled="@(card.IsEnabled)" @onclick="(async e => await flipCard(card))">
                 <div style="display: flex; align-items: center; justify-content: center;">@card.Text</div>
             </button>
 }
@@ -107,10 +60,10 @@
 
         <div class="bottom-bar">
             <div class="score">
-                Flipped: @Flipped
+                Flipped: @game.Flipped
             </div>
             <div class="deal">
-                <button @onclick="@DealCards">New</button>
+                <button @onclick="@(async() => await DealCards(true))">New</button>
             </div>
         </div>
     </div>

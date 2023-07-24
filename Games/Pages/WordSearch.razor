@@ -52,7 +52,7 @@
         theGameW.HideSolution = !theGameW.HideSolution;
     }
 
-    public void Highlight(int r, int c)
+    public async Task Highlight(int r, int c)
     {
         if (theGameW.BgColor.First(o => o.X == r && o.Y == c).Value == "00f")
         {
@@ -62,9 +62,10 @@
         {
             theGameW.BgColor.First(o => o.X == r && o.Y == c).Value = "00f";
         }
+        await localStorage.SetItemAsync(localStorageLabel, theGameW);
     }
 
-    public void CrossOut(int index)
+    public async Task CrossOut(int index)
     {
         if (theGameW.Finds[index] == "")
         {
@@ -74,6 +75,7 @@
         {
             theGameW.Finds[index] = "";
         }
+        await localStorage.SetItemAsync(localStorageLabel, theGameW);
     }   
 
     public async ValueTask DisposeAsync()
@@ -93,7 +95,7 @@
                     {
                         string print = theGameW.Found[find];
                         var local_find = find;
-                        <tr><td style="text-decoration: @theGameW.Finds[find];" @onclick="(e => CrossOut(local_find))">@print</td></tr>
+                        <tr><td style="text-decoration: @theGameW.Finds[find];" @onclick="(async e => await CrossOut(local_find))">@print</td></tr>
                     }
                 }
             </table> 
@@ -110,7 +112,7 @@
                             @for (int c = 0; c < theGameW.Width; c++)
                             {
                                 var local_c = c;
-                                <td style="width: 25px; text-align: center;background-color:@theGameW.BgColor.First(o => o.X == r && o.Y == c).Value" @onclick="(e => Highlight(local_r, local_c))">@theGameW.Puzzle.First(o => o.X == r && o.Y == c).Value</td>
+                                <td style="width: 25px; text-align: center;background-color:@theGameW.BgColor.First(o => o.X == r && o.Y == c).Value" @onclick="(async e => await Highlight(local_r, local_c))">@theGameW.Puzzle.First(o => o.X == r && o.Y == c).Value</td>
                             }
                         </tr>
                     }

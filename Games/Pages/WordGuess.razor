@@ -48,7 +48,7 @@
         }
     }  
 
-    public void Guess()
+    public async Task Guess()
     {
         if (game.Clicks < 5) return;
 
@@ -64,6 +64,8 @@
         }
         
         game.Update = true;
+
+        await localStorage.SetItemAsync(localStorageLabel, game);
     }
 
     public string GetColor(Letter letter)
@@ -150,7 +152,7 @@
         return game.Finished ? game.Word : string.Empty;
     }
 
-    public void SetLetter(string letter)
+    public async Task SetLetter(string letter)
     {
         game.Update = true;
 
@@ -161,9 +163,11 @@
 
         if (game.Clicks < 5)
             game.Clicks++;
+
+        await localStorage.SetItemAsync(localStorageLabel, game);
     }
 
-    public void DeleteLetter()
+    public async Task DeleteLetter()
     {
         if (game.Clicks == 0) return;
 
@@ -175,6 +179,8 @@
         game.Clicks--;
 
         game.Update = true;
+
+        await localStorage.SetItemAsync(localStorageLabel, game);
     }
 
     public async ValueTask DisposeAsync()
@@ -196,43 +202,43 @@
     </div>
             
     <div class="keyboard keyboard1">                
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Q"); color: @SetForeColor("Q")' @onclick='(() => SetLetter("Q"))' disabled="@game.Finished">Q</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("W"); color: @SetForeColor("W")' @onclick='(() => SetLetter("W"))' disabled="@game.Finished">W</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("E"); color: @SetForeColor("E")' @onclick='(() => SetLetter("E"))' disabled="@game.Finished">E</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("R"); color: @SetForeColor("R")' @onclick='(() => SetLetter("R"))' disabled="@game.Finished">R</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("T"); color: @SetForeColor("T")' @onclick='(() => SetLetter("T"))' disabled="@game.Finished">T</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Y"); color: @SetForeColor("Y")' @onclick='(() => SetLetter("Y"))' disabled="@game.Finished">Y</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("U"); color: @SetForeColor("U")' @onclick='(() => SetLetter("U"))' disabled="@game.Finished">U</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("I"); color: @SetForeColor("I")' @onclick='(() => SetLetter("I"))' disabled="@game.Finished">I</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("O"); color: @SetForeColor("O")' @onclick='(() => SetLetter("O"))' disabled="@game.Finished">O</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("P"); color: @SetForeColor("P")' @onclick='(() => SetLetter("P"))' disabled="@game.Finished">P</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Q"); color: @SetForeColor("Q")' @onclick='(async () => await SetLetter("Q"))' disabled="@game.Finished">Q</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("W"); color: @SetForeColor("W")' @onclick='(async () => await SetLetter("W"))' disabled="@game.Finished">W</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("E"); color: @SetForeColor("E")' @onclick='(async () => await SetLetter("E"))' disabled="@game.Finished">E</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("R"); color: @SetForeColor("R")' @onclick='(async () => await SetLetter("R"))' disabled="@game.Finished">R</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("T"); color: @SetForeColor("T")' @onclick='(async () => await SetLetter("T"))' disabled="@game.Finished">T</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Y"); color: @SetForeColor("Y")' @onclick='(async () => await SetLetter("Y"))' disabled="@game.Finished">Y</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("U"); color: @SetForeColor("U")' @onclick='(async () => await SetLetter("U"))' disabled="@game.Finished">U</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("I"); color: @SetForeColor("I")' @onclick='(async () => await SetLetter("I"))' disabled="@game.Finished">I</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("O"); color: @SetForeColor("O")' @onclick='(async () => await SetLetter("O"))' disabled="@game.Finished">O</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("P"); color: @SetForeColor("P")' @onclick='(async () => await SetLetter("P"))' disabled="@game.Finished">P</button>
     </div>
 
     <div class="keyboard keyboard2">
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("A"); color: @SetForeColor("A")' @onclick='(() => SetLetter("A"))' disabled="@game.Finished">A</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("S"); color: @SetForeColor("S")' @onclick='(() => SetLetter("S"))' disabled="@game.Finished">S</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("D"); color: @SetForeColor("D")' @onclick='(() => SetLetter("D"))' disabled="@game.Finished">D</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("F"); color: @SetForeColor("F")' @onclick='(() => SetLetter("F"))' disabled="@game.Finished">F</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("G"); color: @SetForeColor("G")' @onclick='(() => SetLetter("G"))' disabled="@game.Finished">G</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("H"); color: @SetForeColor("H")' @onclick='(() => SetLetter("H"))' disabled="@game.Finished">H</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("J"); color: @SetForeColor("J")' @onclick='(() => SetLetter("J"))' disabled="@game.Finished">J</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("K"); color: @SetForeColor("K")' @onclick='(() => SetLetter("K"))' disabled="@game.Finished">K</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("L"); color: @SetForeColor("L")' @onclick='(() => SetLetter("L"))' disabled="@game.Finished">L</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("A"); color: @SetForeColor("A")' @onclick='(async () => await SetLetter("A"))' disabled="@game.Finished">A</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("S"); color: @SetForeColor("S")' @onclick='(async () => await SetLetter("S"))' disabled="@game.Finished">S</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("D"); color: @SetForeColor("D")' @onclick='(async () => await SetLetter("D"))' disabled="@game.Finished">D</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("F"); color: @SetForeColor("F")' @onclick='(async () => await SetLetter("F"))' disabled="@game.Finished">F</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("G"); color: @SetForeColor("G")' @onclick='(async () => await SetLetter("G"))' disabled="@game.Finished">G</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("H"); color: @SetForeColor("H")' @onclick='(async () => await SetLetter("H"))' disabled="@game.Finished">H</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("J"); color: @SetForeColor("J")' @onclick='(async () => await SetLetter("J"))' disabled="@game.Finished">J</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("K"); color: @SetForeColor("K")' @onclick='(async () => await SetLetter("K"))' disabled="@game.Finished">K</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("L"); color: @SetForeColor("L")' @onclick='(async () => await SetLetter("L"))' disabled="@game.Finished">L</button>
     </div>
 
     <div class="keyboard keyboard3">
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Z"); color: @SetForeColor("Z")' @onclick='(() => SetLetter("Z"))' disabled="@game.Finished">Z</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("X"); color: @SetForeColor("X")' @onclick='(() => SetLetter("X"))' disabled="@game.Finished">X</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("C"); color: @SetForeColor("C")' @onclick='(() => SetLetter("C"))' disabled="@game.Finished">C</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("V"); color: @SetForeColor("V")' @onclick='(() => SetLetter("V"))' disabled="@game.Finished">V</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("B"); color: @SetForeColor("B")' @onclick='(() => SetLetter("B"))' disabled="@game.Finished">B</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("N"); color: @SetForeColor("N")' @onclick='(() => SetLetter("N"))' disabled="@game.Finished">N</button>
-        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("M"); color: @SetForeColor("M")' @onclick='(() => SetLetter("M"))' disabled="@game.Finished">M</button>
-        <button class="btn btn-outline-secondary rounded" @onclick="DeleteLetter" disabled="@game.Finished">&#9003;</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Z"); color: @SetForeColor("Z")' @onclick='(async () => await SetLetter("Z"))' disabled="@game.Finished">Z</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("X"); color: @SetForeColor("X")' @onclick='(async () => await SetLetter("X"))' disabled="@game.Finished">X</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("C"); color: @SetForeColor("C")' @onclick='(async () => await SetLetter("C"))' disabled="@game.Finished">C</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("V"); color: @SetForeColor("V")' @onclick='(async () => await SetLetter("V"))' disabled="@game.Finished">V</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("B"); color: @SetForeColor("B")' @onclick='(async () => await SetLetter("B"))' disabled="@game.Finished">B</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("N"); color: @SetForeColor("N")' @onclick='(async () => await SetLetter("N"))' disabled="@game.Finished">N</button>
+        <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("M"); color: @SetForeColor("M")' @onclick='(async () => await SetLetter("M"))' disabled="@game.Finished">M</button>
+        <button class="btn btn-outline-secondary rounded" @onclick="async() => await DeleteLetter()" disabled="@game.Finished">&#9003;</button>
     </div>
 
     <div class="controls">
-        <button class="btn btn-outline-primary rounded" @onclick="@Guess" disabled="@game.Finished">Guess</button>
+        <button class="btn btn-outline-primary rounded" @onclick="@(async () => await Guess())" disabled="@game.Finished">Guess</button>
         <button class="btn btn-outline-secondary rounded" @onclick="(e => Setup(true))">New</button>
         <label>@(Finished())</label>
         <label><small class="text-danger">@game.Msg</small></label>

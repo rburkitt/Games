@@ -1,6 +1,7 @@
 ﻿@page "/concentration"
 
-@using System
+@implements IAsyncDisposable;
+
 @using System.Collections.Generic
 @using System.Linq
 @using Games.Concentration
@@ -19,7 +20,12 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await localStorage.SetItemAsync("lastPage", "concentration");
+        await localStorage.SetItemAsync("lastPage", localStorageLabel);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await localStorage.SetItemAsync(localStorageLabel, game);
     }
 
     public async Task DealCards(bool newGame = false)
@@ -29,6 +35,10 @@
         if (inLocalStorage && !newGame)
         {
             game = await localStorage.GetItemAsync<Pexeso>(localStorageLabel);
+            var tmpCard1 = game.Cards.FirstOrDefault(o => game.Card1 != null && o.IsEnabled == game.Card1.IsEnabled && o.Text == game.Card1.Text && o.Value == game.Card1.Value);
+            var tmpCard2 = game.Cards.FirstOrDefault(o => game.Card2 != null && o.IsEnabled == game.Card2.IsEnabled && o.Text == game.Card2.Text && o.Value == game.Card2.Value);
+            game.Card1 = tmpCard1;
+            game.Card2 = tmpCard2;
         }
         else
         {
@@ -42,7 +52,7 @@
 
     public async Task flipCard(Card card)
     {
-        game.flipCard(card);
+        game.FlipCard(card);
 
         await localStorage.SetItemAsync(localStorageLabel, game);
     }

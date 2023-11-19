@@ -130,38 +130,43 @@
             {
                 if (dir == 0)
                 {
-                    for (int r = row; r < row + word.Length; r++)
+                    int r = row;
+                    foreach (var letter in word)
                     {
                         var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == col);
-                        if (item != null && !item.Value.Equals("*"))
+                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter))
                         {
                             return false;
                         }
+                        r++;
                     }
                 }
                 else if (dir == 1)
                 {
-                    for (int c = col; c < col + word.Length; c++)
+                    int c = col;
+                    foreach (var letter in word)
                     {
                         var item = Puzzle.FirstOrDefault(o => o.X == row && o.Y == c);
-                        if (item != null && !item.Value.Equals("*"))
+                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter))
                         {
                             return false;
                         }
+                        c++;
                     }
                 }
                 else
                 {
-                    for (int r = row; r < row + word.Length; r++)
+                    int r = row;
+                    int c = col;
+                    foreach (var letter in word)
                     {
-                        for (int c = col; c < col + word.Length; c++)
+                        var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == c);
+                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter))
                         {
-                            var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == c);
-                            if (item != null && !item.Value.Equals("*"))
-                            {
-                                return false;
-                            }
+                            return false;
                         }
+                        r++;
+                        c++;
                     }
                 }
             }
@@ -169,38 +174,43 @@
             {
                 if (dir == 0)
                 {
-                    for (int r = row; r >= row - word.Length; r--)
+                    int r = row;
+                    foreach (var letter in word)
                     {
                         var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == col);
-                        if (item != null && !item.Value.Equals("*"))
+                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter))
                         {
                             return false;
                         }
+                        r--;
                     }
                 }
                 else if (dir == 1)
                 {
-                    for (int c = col; c >= col - word.Length; c--)
+                    int c = col;
+                    foreach (var letter in word)
                     {
                         var item = Puzzle.FirstOrDefault(o => o.X == row && o.Y == c);
-                        if (item != null && !item.Value.Equals("*"))
+                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter))
                         {
                             return false;
                         }
+                        c--;
                     }
                 }
                 else
                 {
-                    for (int r = row; r >= row - word.Length; r--)
+                    int r = row;
+                    int c = col;
+                    foreach (var letter in word)
                     {
-                        for (int c = col; c >= col - word.Length; c--)
+                        var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == c);
+                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter))
                         {
-                            var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == c);
-                            if (item != null && !item.Value.Equals("*"))
-                            {
-                                return false;
-                            }
+                            return false;
                         }
+                        r--;
+                        c--;
                     }
                 }
             }

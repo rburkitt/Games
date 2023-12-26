@@ -46,51 +46,53 @@ namespace Games.Bagels
                 return $"You ran out of guesses: {secretNumber}!";
             }
 
-            var clues = new StringBuilder();
+            var clues = new List<string>();
 
             // if the user guessed the correct number in the correct position
             if (CurrentGuess == secretNumber.ToString())
             {
                 // the computer responds with "You got it!"
-                clues.Append("You got it!");
+                clues.Add("You got it!");
             }
             else
             {
                 // the computer responds with "Fermi" if the user guessed the correct number in the correct position
                 if (CurrentGuess[0] == secretNumber.ToString()[0])
                 {
-                    clues.Append("Fermi ");
+                    clues.Add("Fermi ");
                 }
                 else if (CurrentGuess[1] == secretNumber.ToString()[1])
                 {
-                    clues.Append("Fermi ");
+                    clues.Add("Fermi ");
                 }
                 else if (CurrentGuess[2] == secretNumber.ToString()[2])
                 {
-                    clues.Append("Fermi ");
+                    clues.Add("Fermi ");
                 }
                 // the computer responds with "Pico" if the user guessed the correct number in the wrong position
                 if (CurrentGuess[0] == secretNumber.ToString()[1] || CurrentGuess[0] == secretNumber.ToString()[2])
                 {
-                    clues.Append("Pico ");
+                    clues.Add("Pico ");
                 }
                 else if (CurrentGuess[1] == secretNumber.ToString()[0] || CurrentGuess[1] == secretNumber.ToString()[2])
                 {
-                    clues.Append("Pico ");
+                    clues.Add("Pico ");
                 }
                 else if (CurrentGuess[2] == secretNumber.ToString()[0] || CurrentGuess[2] == secretNumber.ToString()[1])
                 {
-                    clues.Append("Pico ");
+                    clues.Add("Pico ");
                 }
                 // the computer responds with "Bagels" if the user guessed the wrong number
                 if (CurrentGuess[0] != secretNumber.ToString()[0] && CurrentGuess[0] != secretNumber.ToString()[1] && CurrentGuess[0] != secretNumber.ToString()[2] &&
                                        CurrentGuess[1] != secretNumber.ToString()[0] && CurrentGuess[1] != secretNumber.ToString()[1] && CurrentGuess[1] != secretNumber.ToString()[2] &&
                                                           CurrentGuess[2] != secretNumber.ToString()[0] && CurrentGuess[2] != secretNumber.ToString()[1] && CurrentGuess[2] != secretNumber.ToString()[2])
                 {
-                    clues.Append("Bagels ");
+                    clues.Add("Bagels ");
                 }
-            }   
-            return clues.ToString();
+            }
+            // the computer responds with the clues in alphabetical order
+            clues.Sort();
+            return clues.Aggregate((a, b) => $"{a} {b}");
         }
     }
 }

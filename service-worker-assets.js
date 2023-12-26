@@ -25,7 +25,7 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-cFKSWTuypFuStOtfdgwUcAMkGZ43ER3PRIiEoCecc1Q=",
+      "hash": "sha256-aG2MA2bdtb+yIV3iraYr3B6InnBZNPEyy7HXSD6YEJM=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -33,7 +33,7 @@
       "url": "_framework\/Blazored.LocalStorage.dll"
     },
     {
-      "hash": "sha256-ZBQOc6oUUEL2OetAl+l5nZrqk3GhAPg9pLuGU6g0e+U=",
+      "hash": "sha256-zpZQGH6G2K4ghVCJY08JlHnp+76N3gDt\/1qnkFsNQYs=",
       "url": "_framework\/Games.dll"
     },
     {
@@ -109,7 +109,7 @@
       "url": "_framework\/System.ComponentModel.dll"
     },
     {
-      "hash": "sha256-68TI0bN1VhK6jS5H0QRV9P1K6RFEjFLvJKA4zxc0i38=",
+      "hash": "sha256-cpNj3WHBuTdPJlKwidG6Lu9pzNfVTD5h4hOwkcqIpF4=",
       "url": "_framework\/System.Linq.dll"
     },
     {
@@ -133,7 +133,7 @@
       "url": "_framework\/System.ObjectModel.dll"
     },
     {
-      "hash": "sha256-HHW9d27REP9iFNWmhcVKf3uJ9TrUNnEnLDv6i4ZeCqc=",
+      "hash": "sha256-lw6oAk7e+NQsP2E88oczSQJMbjfAV3amg\/0+p9S+GWw=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -149,7 +149,7 @@
       "url": "_framework\/System.Runtime.CompilerServices.Unsafe.dll"
     },
     {
-      "hash": "sha256-s1v1qvbntTULvmV0v8aqtlm\/VQfnRoWVUVs0zTbA47k=",
+      "hash": "sha256-uqDRaF3\/e2oT9O6ktZmaffdBca73H\/1UyMIxiBe8NNI=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -169,11 +169,11 @@
       "url": "_framework\/System.Threading.dll"
     },
     {
-      "hash": "sha256-\/p2gOQt4E3dnzZE6EzNv9rDYBrQItZF0nWDrToYgYjc=",
+      "hash": "sha256-Ry7VfHbgMn9WhvRRkOKLz4+HP8SE7WQh4hUhZ6IrEfc=",
       "url": "_framework\/dotnet.6.0.25.vp407kvhqq.js"
     },
     {
-      "hash": "sha256-viS02xUJYc0d8KFld9A6tXvoPw9bo1sIK\/641ptf1jA=",
+      "hash": "sha256-JjpBHbIW7Ou58rckozMR\/njGCL6RgpMFKBnbiRqJdkY=",
       "url": "_framework\/dotnet.wasm"
     },
     {
@@ -269,5 +269,5 @@
       "url": "words3.json"
     }
   ],
-  "version": "dHL0dclk"
+  "version": "pge1\/mpr"
 };

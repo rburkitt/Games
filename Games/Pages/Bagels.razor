@@ -1,0 +1,160 @@
+﻿@page "/bagels"
+
+@implements IAsyncDisposable;
+
+@using System.Collections.Generic;
+@using Games.Bagels
+@using Games.Services;
+
+@inject Blazored.LocalStorage.ILocalStorageService localStorage;
+
+@code {
+    // the user enters a 3 digit number and clicks the "Guess" button
+    // the computer responds with "Fermi" if the user guessed the correct number in the correct position
+    // the computer responds with "Pico" if the user guessed the correct number in the wrong position
+    // the computer responds with "Bagels" if the user guessed the wrong number
+    // the computer responds with "You got it!" if the user guessed the correct number in the correct position
+
+    private const string localStorageLabel = "bagels";
+    private Games.Bagels.Game game = new Games.Bagels.Game();
+    private string clues = "";
+
+    public async Task SetNumber(string guess)
+    {
+        game.SetNumber(guess);
+
+        await localStorage.SetItemAsync(localStorageLabel, game);
+    }
+
+    public async Task DeleteNumber()
+    {
+        game.DeleteNumber();
+
+        await localStorage.SetItemAsync(localStorageLabel, game);
+    }
+
+    public async Task Guess()
+    {
+        clues = game.GetClues();
+
+        await localStorage.SetItemAsync(localStorageLabel, game);
+    }
+
+    public async Task Setup(bool newGame = false)
+    {
+        var inLocalStorage = await localStorage.ContainKeyAsync(localStorageLabel);
+
+        if (inLocalStorage && !newGame)
+        {
+            game = await localStorage.GetItemAsync<Games.Bagels.Game>(localStorageLabel);
+        }
+        else
+        {
+            clues = "";
+            game = new Games.Bagels.Game();
+
+            await localStorage.SetItemAsync(localStorageLabel, game);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await localStorage.SetItemAsync("lastPage", localStorageLabel);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await localStorage.SetItemAsync(localStorageLabel, game);
+    }
+}
+
+<div class="gameContainer">
+    <div id="stack">
+        <input type="text" class="form-control" value="@game.CurrentGuess" maxlength="3" disabled dir="rtl" />
+    </div>
+    <div>
+        <label>@clues</label>
+    </div>
+    <div class="keyboard keyboard">
+        <button class="btn btn-outline-secondary rounded" @onclick='(async () => await SetNumber("7"))'>7</button>
+        <button class="btn btn-outline-secondary rounded" @onclick='(async () => await SetNumber("8"))'>8</button>
+        <button class="btn btn-outline-secondary rounded" @onclick='(async () => await SetNumber("9"))'>9</button>
+    </div>
+
+    <div class="keyboard keyboard">
+        <button class="btn btn-outline-secondary rounded" @onclick='(async () => await SetNumber("4"))'>4</button>
+        <button class="btn btn-outline-secondary rounded" @onclick='(async () => await SetNumber("5"))'>5</button>
+        <button class="btn btn-outline-secondary rounded" @onclick='(async () => await SetNumber("6"))'>6</button>
+    </div>
+
+    <div class="keyboard keyboard">
+        <button class="btn btn-outline-secondary rounded" @onclick='(async () => await SetNumber("1"))'>1</button>
+        <button class="btn btn-outline-secondary rounded" @onclick='(async () => await SetNumber("2"))'>2</button>
+        <button class="btn btn-outline-secondary rounded" @onclick='(async () => await SetNumber("3"))'>3</button>
+    </div>
+
+    <div class="keyboard keyboard">
+        <button class="btn btn-outline-secondary rounded" @onclick='(async () => await SetNumber("0"))'>0</button>
+        <button class="btn btn-outline-secondary rounded" @onclick="async() => await DeleteNumber()">&#9003;</button>
+        <button class="btn btn-outline-secondary rounded" @onclick="@(async () => await Guess())">&#9166;</button>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-outline-secondary rounded" @onclick="(e => Setup(true))">New</button>
+    </div>
+</div>
+
+<style>
+    .gameContainer {
+        display: grid;
+        grid-template-columns: auto;
+        justify-items: center;
+        align-items: center;
+    }
+
+    #stack label {
+        width: 40px;
+        height: 40px;
+        font-weight: bold;
+    }
+
+    div.keyboard button {
+        font-weight: bold;
+        font-size: small;
+        padding: 8px;
+        margin-top: 5px;
+        width: 30px;
+    }
+
+    #stack {
+        display: grid;
+        grid-template-columns: repeat(1, 100px);
+        grid-gap: 3px;
+        padding: 3px;
+    }
+
+    .keyboard {
+        display: grid;
+        grid-template-columns: repeat(3, 30px);
+        grid-gap: 3px;
+        padding: 3px;
+    }
+
+    .controls {
+        display: grid;
+        grid-template-columns: repeat(1, 100px);
+        grid-gap: 3px;
+        padding: 3px;
+    }
+
+    div.controls button {
+        margin-top: 5px;
+        font-size: x-small;
+    }
+
+    div.controls label {
+        margin-top: 5px;
+        font-weight: bold;
+        vertical-align: bottom;
+    }
+</style>

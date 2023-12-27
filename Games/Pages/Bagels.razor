@@ -17,7 +17,6 @@
 
     private const string localStorageLabel = "bagels";
     private Games.Bagels.Game game = new Games.Bagels.Game();
-    private string clues = "";
 
     public async Task SetNumber(string guess)
     {
@@ -35,7 +34,7 @@
 
     public async Task Guess()
     {
-        clues = game.GetClues();
+        game.GetClues();
 
         await localStorage.SetItemAsync(localStorageLabel, game);
     }
@@ -50,11 +49,15 @@
         }
         else
         {
-            clues = "";
             game = new Games.Bagels.Game();
 
             await localStorage.SetItemAsync(localStorageLabel, game);
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Setup(false);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -73,7 +76,7 @@
         <input type="text" class="form-control" value="@game.CurrentGuess" maxlength="3" disabled dir="rtl" />
     </div>
     <div>
-        <label>@clues</label>
+        <label>@game.Clues</label>
     </div>
     <div class="keyboard keyboard">
         <button class="btn btn-outline-secondary rounded" @onclick='(async () => await SetNumber("7"))'>7</button>

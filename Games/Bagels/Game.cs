@@ -4,7 +4,8 @@ namespace Games.Bagels
 {
     public class Game
     {
-        public string CurrentGuess { get; private set; } = "";
+        public string CurrentGuess { get; set; } = "";
+        public string Clues { get; set; } = "";
         private int GuessCount;
         private readonly int secretNumber = 0;
         private const int MaxGuesses = 10;
@@ -34,8 +35,10 @@ namespace Games.Bagels
                 CurrentGuess = CurrentGuess[..^1];
         }
 
-        public string GetClues()
+        public void GetClues()
         {
+            var clues = new List<string>();
+
             // increment the guess count
             GuessCount++;
 
@@ -43,10 +46,8 @@ namespace Games.Bagels
             if (GuessCount > MaxGuesses)
             {
                 // the computer responds with "You lose!"
-                return $"You ran out of guesses: {secretNumber}!";
-            }
-
-            var clues = new List<string>();
+                clues.Add($"You ran out of guesses: {secretNumber}!");
+            }      
 
             // if the user guessed the correct number in the correct position
             if (CurrentGuess == secretNumber.ToString())
@@ -92,7 +93,7 @@ namespace Games.Bagels
             }
             // the computer responds with the clues in alphabetical order
             clues.Sort();
-            return clues.Aggregate((a, b) => $"{a} {b}");
+            Clues = clues.Aggregate((a, b) => $"{a} {b}");
         }
     }
 }

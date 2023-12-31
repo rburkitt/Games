@@ -21,6 +21,11 @@ namespace Games.Bagels
             return secretNumber;
         }
 
+        public void ClearNumber()
+        {
+            CurrentGuess = "";
+        }
+
         public void SetNumber(string number)
         {
             if (CurrentGuess.Length < 3)

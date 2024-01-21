@@ -1,0 +1,158 @@
+﻿@page "/sliderpuzzle"
+
+@implements IAsyncDisposable;
+
+@using System.Collections.Generic;
+@using Games.SliderPuzzle
+
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+@code {
+    private Game theGame = new Game();
+
+    private const string localStorageLabel = "sliderPuzzle";
+
+    public async Task Setup(bool newGame = false)
+    {
+        var inLocalStorage = await localStorage.ContainKeyAsync(localStorageLabel);
+
+        if (inLocalStorage && !newGame)
+        {
+            theGame = await localStorage.GetItemAsync<Game>(localStorageLabel);
+        }
+        else
+        {
+
+            theGame = new Game();
+
+            await localStorage.SetItemAsync(localStorageLabel, theGame);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Setup(false);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await localStorage.SetItemAsync("lastPage", localStorageLabel);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await localStorage.SetItemAsync(localStorageLabel, theGame);
+    }
+
+    public async Task MoveCell(Cell cell)
+    {
+        int index = theGame.Cells.FindIndex(c => c.Value == cell.Value);
+        theGame.MoveCell(index);
+
+        await localStorage.SetItemAsync(localStorageLabel, theGame);
+    }
+}
+
+<div class="gameContainer">
+    <div id="stack">
+        @foreach (var cell in theGame.Cells)
+        {
+            <button @onclick="(async e => await MoveCell(cell))">
+                <div style="display: flex; align-items: center; justify-content: center;">@cell.Value</div>
+            </button>
+        }
+    </div>
+
+    <div class="bottom-bar">
+        <div class="deal">
+            <button @onclick="@(async() => await Setup(true))">New</button>
+        </div>
+    </div>
+</div>
+<style>
+
+    .gameContainer h3 {
+        text-align: center;
+        vertical-align: middle;
+        justify-content: center;
+    }
+
+    .gameContainer {
+        padding: 15px;
+        width: 300px;
+        margin: auto;
+    }
+
+    .score {
+        color: black;
+        float: left;
+    }
+
+    .deal {
+        color: black;
+        float: right;
+    }
+
+        .deal button {
+            background-color: transparent;
+            text-align: center;
+            vertical-align: middle;
+            display: inline-flex;
+            justify-content: center;
+            border: 1px solid black;
+            color: black;
+            padding: .25rem .5rem;
+            font-size: .875rem;
+            line-height: 1.5;
+            border-radius: .2rem;
+        }
+
+    #stack {
+        align-content: center;
+        width: 100%;
+        margin: auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 5px;
+        padding: 5px;
+    }
+
+    .bottom-bar {
+        align-content: center;
+        width: 100%;
+        margin: auto;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-gap: 20px;
+        padding: 20px;
+    }
+
+    #stack button {
+        background-color: transparent;
+        width: 60px;
+        height: 80px;
+        font-size: 30px;
+        border: 1px solid black;
+        color: black;
+        border-radius: .2rem;
+    }
+
+    @@media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0) {
+        @@media {
+            #stack button {
+                text-align: center;
+                vertical-align: middle;
+                display: inline-flex;
+                justify-content: center;
+            }
+        }
+    }
+
+    #stack button:disabled,
+    #stack button[disabled] {
+        border: 1px solid #999999;
+        background-color: #cccccc;
+        color: #666666;
+    }
+
+</style>

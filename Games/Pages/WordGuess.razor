@@ -46,7 +46,13 @@
 
             await localStorage.SetItemAsync(localStorageLabel, game);
         }
-    }  
+    }
+
+    public async Task Quit()
+    {
+        game.Finished = true;
+        await localStorage.SetItemAsync(localStorageLabel, game);
+    }
 
     public async Task Guess()
     {
@@ -239,6 +245,7 @@
 
     <div class="controls">
         <button class="btn btn-outline-primary rounded" @onclick="@(async () => await Guess())" disabled="@game.Finished">Guess</button>
+        <button class="btn btn-outline-secondary rounded" @onclick="(async () => await Quit())" disabled="@game.Finished">Quit</button>
         <button class="btn btn-outline-secondary rounded" @onclick="(e => Setup(true))">New</button>
         <label>@(Finished())</label>
         <label><small class="text-danger">@game.Msg</small></label>

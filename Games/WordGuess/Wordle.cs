@@ -15,6 +15,8 @@
         public List<string> Guesses { get; set; }
         public bool Update { get; set; }
 
+        public List<string> GuessedWords { get; set; } = new List<string>();
+
         public Wordle()
         {
             Word = "";
@@ -65,6 +67,15 @@
                 throw new Exception("Your guess must be 5 letters.");
 
             string myGuess = string.Join("", currentRound.Letters.Select(o => o.Text).ToArray());
+
+            if (!GuessedWords.Contains(myGuess))
+            {
+                GuessedWords.Add(myGuess);
+            }
+            else
+            {
+                throw new Exception($"You already guessed {myGuess}.");
+            }
 
             if(!Words.Contains(myGuess.ToLower()))
                 throw new Exception("Invalid Word, not in word list.");

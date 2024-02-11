@@ -1,0 +1,75 @@
+﻿@code {
+    private string SetKeyColor(string letter)
+    {
+        string retVal = OnSetKeyColor(letter);
+        return retVal;
+    }
+
+    private string SetForeColor(string letter)
+    {
+        string retVal = OnSetForeColor(letter);
+        return retVal;
+    }
+
+    private async Task SetLetter(string letter)
+    {
+        await OnSetLetter.InvokeAsync(letter);
+    }
+
+    private async Task DeleteLetter()
+    {
+        await OnDeleteLetter.InvokeAsync();
+    }
+
+    [Parameter]
+    public Func<string, string> OnSetKeyColor { get; set; }
+
+    [Parameter]
+    public Func<string, string> OnSetForeColor { get; set; }
+
+
+    [Parameter]
+    public EventCallback<string> OnSetLetter { get; set; }
+
+    [Parameter]
+    public EventCallback OnDeleteLetter { get; set; }
+
+    [Parameter]
+    public bool Finished { get; set; } = false;
+}
+
+<div class="keyboard keyboard1">
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Q"); color: @SetForeColor("Q")' @onclick='(async () => await SetLetter("Q"))' disabled="@Finished">Q</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("W"); color: @SetForeColor("W")' @onclick='(async () => await SetLetter("W"))' disabled="@Finished">W</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("E"); color: @SetForeColor("E")' @onclick='(async () => await SetLetter("E"))' disabled="@Finished">E</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("R"); color: @SetForeColor("R")' @onclick='(async () => await SetLetter("R"))' disabled="@Finished">R</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("T"); color: @SetForeColor("T")' @onclick='(async () => await SetLetter("T"))' disabled="@Finished">T</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Y"); color: @SetForeColor("Y")' @onclick='(async () => await SetLetter("Y"))' disabled="@Finished">Y</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("U"); color: @SetForeColor("U")' @onclick='(async () => await SetLetter("U"))' disabled="@Finished">U</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("I"); color: @SetForeColor("I")' @onclick='(async () => await SetLetter("I"))' disabled="@Finished">I</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("O"); color: @SetForeColor("O")' @onclick='(async () => await SetLetter("O"))' disabled="@Finished">O</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("P"); color: @SetForeColor("P")' @onclick='(async () => await SetLetter("P"))' disabled="@Finished">P</button>
+</div>
+
+<div class="keyboard keyboard2">
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("A"); color: @SetForeColor("A")' @onclick='(async () => await SetLetter("A"))' disabled="@Finished">A</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("S"); color: @SetForeColor("S")' @onclick='(async () => await SetLetter("S"))' disabled="@Finished">S</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("D"); color: @SetForeColor("D")' @onclick='(async () => await SetLetter("D"))' disabled="@Finished">D</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("F"); color: @SetForeColor("F")' @onclick='(async () => await SetLetter("F"))' disabled="@Finished">F</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("G"); color: @SetForeColor("G")' @onclick='(async () => await SetLetter("G"))' disabled="@Finished">G</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("H"); color: @SetForeColor("H")' @onclick='(async () => await SetLetter("H"))' disabled="@Finished">H</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("J"); color: @SetForeColor("J")' @onclick='(async () => await SetLetter("J"))' disabled="@Finished">J</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("K"); color: @SetForeColor("K")' @onclick='(async () => await SetLetter("K"))' disabled="@Finished">K</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("L"); color: @SetForeColor("L")' @onclick='(async () => await SetLetter("L"))' disabled="@Finished">L</button>
+</div>
+
+<div class="keyboard keyboard3">
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("Z"); color: @SetForeColor("Z")' @onclick='(async () => await SetLetter("Z"))' disabled="@Finished">Z</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("X"); color: @SetForeColor("X")' @onclick='(async () => await SetLetter("X"))' disabled="@Finished">X</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("C"); color: @SetForeColor("C")' @onclick='(async () => await SetLetter("C"))' disabled="@Finished">C</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("V"); color: @SetForeColor("V")' @onclick='(async () => await SetLetter("V"))' disabled="@Finished">V</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("B"); color: @SetForeColor("B")' @onclick='(async () => await SetLetter("B"))' disabled="@Finished">B</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("N"); color: @SetForeColor("N")' @onclick='(async () => await SetLetter("N"))' disabled="@Finished">N</button>
+    <button class="btn btn-outline-secondary rounded" style='background-color: @SetKeyColor("M"); color: @SetForeColor("M")' @onclick='(async () => await SetLetter("M"))' disabled="@Finished">M</button>
+    <button class="btn btn-outline-secondary rounded" @onclick="async() => await DeleteLetter()" disabled="@Finished">&#9003;</button>
+</div>

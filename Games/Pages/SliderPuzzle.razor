@@ -9,6 +9,7 @@
 
 @code {
     private Game theGame = new Game();
+    private string Solved = string.Empty;
 
     private const string localStorageLabel = "sliderPuzzle";
 
@@ -49,6 +50,15 @@
         int index = theGame.Cells.FindIndex(c => c.Value == cell.Value);
         theGame.MoveCell(index);
 
+        if (theGame.IsSolved())
+        {
+            Solved = "Solved!";
+        }
+        else
+        {
+            Solved = string.Empty;
+        }
+
         await localStorage.SetItemAsync(localStorageLabel, theGame);
     }
 }
@@ -57,7 +67,7 @@
     <div id="stack">
         @foreach (var cell in theGame.Cells)
         {
-            <button @onclick="(async e => await MoveCell(cell))">
+            <button @onclick="(async e => await MoveCell(cell))" disabled="@cell.Disabled">
                 <div style="display: flex; align-items: center; justify-content: center;">@cell.Value</div>
             </button>
         }
@@ -67,6 +77,7 @@
         <div class="deal">
             <button @onclick="@(async() => await Setup(true))">New</button>
         </div>
+        <div class="is-invalid" role="alert">@Solved</div>
     </div>
 </div>
 <style>

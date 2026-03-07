@@ -88,18 +88,32 @@ namespace Games.WordSearch
 
             for (int k = 0; k < TheWords.Count; k++)
             {
-                int row = rnd.Next(0, Height);
-                int col = rnd.Next(0, Width);
-                int dir = rnd.Next(0, 3);
-                int fwd = rnd.Next(0, 2);
+                int row = 0, col = 0, dir = 0, fwd = 0;
+                bool placed = false;
 
-                while (fwd == 0 && (row + theWords[k].Length > Height || col + theWords[k].Length > Height) || fwd == 1 && (row - theWords[k].Length < 0 || col - theWords[k].Length < 0))//check for out of bounds
+                for (int attempt = 0; attempt < 100; attempt++)
                 {
                     row = rnd.Next(0, Height);
                     col = rnd.Next(0, Width);
+                    dir = rnd.Next(0, 3);
+                    fwd = rnd.Next(0, 2);
+
+                    bool inBounds = dir switch
+                    {
+                        0 => fwd == 0 ? row + theWords[k].Length <= Height : row - theWords[k].Length >= 0,
+                        1 => fwd == 0 ? col + theWords[k].Length <= Width  : col - theWords[k].Length >= 0,
+                        _ => fwd == 0 ? row + theWords[k].Length <= Height && col + theWords[k].Length <= Width
+                                      : row - theWords[k].Length >= 0      && col - theWords[k].Length >= 0
+                    };
+
+                    if (inBounds && Check(fwd, dir, row, col, TheWords[k]))
+                    {
+                        placed = true;
+                        break;
+                    }
                 }
 
-                if (Check(fwd, dir, row, col, TheWords[k]))
+                if (placed)
                 {
                     Found.Add(TheWords[k]);
                     for (int m = 0; m < TheWords[k].Length; m++)//add each word's characters
@@ -152,7 +166,7 @@ namespace Games.WordSearch
                     foreach (var letter in word)
                     {
                         var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == col);
-                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter))
+                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter.ToString()))
                         {
                             return false;
                         }
@@ -165,7 +179,7 @@ namespace Games.WordSearch
                     foreach (var letter in word)
                     {
                         var item = Puzzle.FirstOrDefault(o => o.X == row && o.Y == c);
-                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter))
+                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter.ToString()))
                         {
                             return false;
                         }
@@ -179,7 +193,7 @@ namespace Games.WordSearch
                     foreach (var letter in word)
                     {
                         var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == c);
-                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter))
+                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter.ToString()))
                         {
                             return false;
                         }
@@ -196,7 +210,7 @@ namespace Games.WordSearch
                     foreach (var letter in word)
                     {
                         var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == col);
-                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter))
+                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter.ToString()))
                         {
                             return false;
                         }
@@ -209,7 +223,7 @@ namespace Games.WordSearch
                     foreach (var letter in word)
                     {
                         var item = Puzzle.FirstOrDefault(o => o.X == row && o.Y == c);
-                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter))
+                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter.ToString()))
                         {
                             return false;
                         }
@@ -223,7 +237,7 @@ namespace Games.WordSearch
                     foreach (var letter in word)
                     {
                         var item = Puzzle.FirstOrDefault(o => o.X == r && o.Y == c);
-                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter))
+                        if (item != null && !item.Value.Equals("*") && !item.Value.Equals(letter.ToString()))
                         {
                             return false;
                         }

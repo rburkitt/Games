@@ -41,7 +41,7 @@
         {
             theGameW = new Search();
 
-            theGameW.Setup(wordList.OrderBy(o => System.Guid.NewGuid().ToString()).Take(15).ToList(), 10, 10);
+            theGameW.Setup(wordList.OrderBy(o => System.Guid.NewGuid().ToString()).Take(10).ToList(), 10, 10);
 
             await localStorage.SetItemAsync(localStorageLabel, theGameW);
         }

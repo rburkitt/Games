@@ -1,5 +1,5 @@
 self.assetsManifest = {
-  "version": "aNw21pu6",
+  "version": "W4XQG5KG",
   "assets": [
     {
       "hash": "sha256-HXb9TmW1bVvtFC28t61/rHbOEdoDZ4ojXzhtmOzGfoM=",
@@ -14,8 +14,8 @@ self.assetsManifest = {
       "url": "_framework/Blazored.LocalStorage.ux02l71ii3.wasm"
     },
     {
-      "hash": "sha256-DfkTxdCchNw5zzqAyjrrJdEDFJRXxmOD0tDMK6WX8NI=",
-      "url": "_framework/Games.l23an9pswa.wasm"
+      "hash": "sha256-exL8CJK4jaqiytUlPetfsJjva1oSGyQKF34RPe/4Vbw=",
+      "url": "_framework/Games.lgnfhei4k9.wasm"
     },
     {
       "hash": "sha256-TJpr6ZEUBXERtcwiQSOHjn+LBRIOJRxCSQU2VJcWEbk=",
@@ -174,7 +174,7 @@ self.assetsManifest = {
       "url": "_framework/blazor.webassembly.js"
     },
     {
-      "hash": "sha256-VaRbICTov9hUfp+4YX30LK8t0GG/RBH8CJdRP4YwsQ0=",
+      "hash": "sha256-mTLC5fmyQaEDf9+cPe7rGPjwJsDvEWnRsRgHtIfxnV4=",
       "url": "_framework/dotnet.js"
     },
     {

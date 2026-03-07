@@ -8,7 +8,7 @@
         public Round()
         {
             Score = 0;
-            Letters = new Letter[5] { new Letter(), new Letter(), new Letter(), new Letter(), new Letter() };
+            Letters = [new Letter(), new Letter(), new Letter(), new Letter(), new Letter()];
         }
         public Round(int score, Letter[] letters)
         {

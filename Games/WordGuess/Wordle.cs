@@ -15,7 +15,7 @@
         public List<string> Guesses { get; set; }
         public bool Update { get; set; }
 
-        public List<string> GuessedWords { get; set; } = new List<string>();
+        public List<string> GuessedWords { get; set; } = [];
 
         public Wordle()
         {
@@ -23,10 +23,10 @@
             Turn = 0;
             GuessWord = "";
             Finished = false;
-            Rounds = new() { new Round(), new Round(), new Round(), new Round(), new Round(), new Round() };
+            Rounds = [new Round(), new Round(), new Round(), new Round(), new Round(), new Round()];
             Msg = "";
             Clicks = 0;
-            Guesses = new();
+            Guesses = [];
             Update = false;
         }
 
@@ -51,7 +51,7 @@
             Turn = 0;
             Msg = "";
             Clicks = 0;
-            Guesses = new List<string>();
+            Guesses = [];
             Update = false;
         }
 

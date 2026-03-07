@@ -4,7 +4,7 @@
     {
         public List<Card> Cards { get; set; }
 
-        public List<string> faces = new() { "1", "2", "3", "4", "5", "6", "7", "8" };
+        public List<string> faces = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
         public Card? Card1 { get; set; } = null!;
         public Card? Card2 { get; set; } = null!;
@@ -13,7 +13,7 @@
 
         public Pexeso()
         {
-            Cards = new List<Card>();
+            Cards = [];
             Flipped = 0;
             faces.AddRange(faces);
         }

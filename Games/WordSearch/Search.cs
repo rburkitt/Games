@@ -15,7 +15,7 @@
 
         public bool HidePuzzle { get; set; } = false;
         public bool HideSolution { get; set; } = true;
-        public List<Coordinate> BgColor { get; set; } = new();
+        public List<Coordinate> BgColor { get; set; } = [];
         public string[] Finds { get; set; }
         public int Find { get; set; } = 0;
         public List<string> TheWords { get; set; }
@@ -24,11 +24,11 @@
 
         public Search()
         {
-            Found = new List<string>();
+            Found = [];
             Finds = new string[Found.Count];
-            Puzzle = new List<Coordinate>();
-            Solution = new List<Coordinate>();
-            TheWords = new List<string>();
+            Puzzle = [];
+            Solution = [];
+            TheWords = [];
         }
         public Search(List<Coordinate> puzzle, List<string> found, List<Coordinate> solution, bool hidePuzzle, bool hideSolution, List<Coordinate> bgColor, string[] finds, int find, List<string> theWords, int height, int width)
         {
@@ -54,11 +54,11 @@
             Width = width;
 
             Random rnd = new();
-            Found = new List<string>();
+            Found = [];
 
             string fill = "abcdefghijklmnopqrstuvwxyz";
-            Puzzle = new List<Coordinate>();
-            Solution = new List<Coordinate>();
+            Puzzle = [];
+            Solution = [];
 
             for (int r = 0; r < Height; r++)
             {
@@ -104,7 +104,7 @@
                 }
             }
 
-            Puzzle.Where(o => o.Value == "*").Select(o => o.Value = fill.Substring(rnd.Next(0, 26), 1)).ToList();
+            _ = Puzzle.Where(o => o.Value == "*").Select(o => o.Value = fill.Substring(rnd.Next(0, 26), 1)).ToList();
 
             HidePuzzle = false;
             HideSolution = true;
@@ -116,7 +116,7 @@
             }
         }
 
-        public void Increment(int fwd, ref int val)
+        public static void Increment(int fwd, ref int val)
         {
             if (fwd == 0)
                 val++;

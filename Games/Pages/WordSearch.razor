@@ -35,6 +35,7 @@
         if (inLocalStorage && !newGame)
         {
             theGameW = await localStorage.GetItemAsync<Search>(localStorageLabel);
+            theGameW.BuildIndex();
         }
         else
         {
@@ -54,14 +55,8 @@
 
     public async Task Highlight(int r, int c)
     {
-        if (theGameW.BgColor.First(o => o.X == r && o.Y == c).Value == "00f")
-        {
-            theGameW.BgColor.First(o => o.X == r && o.Y == c).Value = "#fd7";
-        }
-        else
-        {
-            theGameW.BgColor.First(o => o.X == r && o.Y == c).Value = "00f";
-        }
+        var cell = theGameW.BgColorIndex[(r, c)];
+        cell.Value = cell.Value == "00f" ? "#fd7" : "00f";
         await localStorage.SetItemAsync(localStorageLabel, theGameW);
     }
 
@@ -112,7 +107,7 @@
                             @for (int c = 0; c < theGameW.Width; c++)
                             {
                                 var local_c = c;
-                                <td style="width: 25px; text-align: center;background-color:@theGameW.BgColor.First(o => o.X == r && o.Y == c).Value" @onclick="(async e => await Highlight(local_r, local_c))">@theGameW.Puzzle.First(o => o.X == r && o.Y == c).Value</td>
+                                <td style="width: 25px; text-align: center;background-color:@theGameW.BgColorIndex[(r, c)].Value" @onclick="(async e => await Highlight(local_r, local_c))">@theGameW.PuzzleIndex[(r, c)].Value</td>
                             }
                         </tr>
                     }
@@ -128,7 +123,7 @@
                         <tr>
                             @for (int c = 0; c < theGameW.Width; c++)
                             {
-                                <td style="width: 25px; text-align: center;">@theGameW.Solution.First(o => o.X == r && o.Y == c).Value</td>
+                                <td style="width: 25px; text-align: center;">@theGameW.SolutionIndex[(r, c)].Value</td>
                             }
                         </tr>
                     }

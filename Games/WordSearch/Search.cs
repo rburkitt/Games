@@ -1,4 +1,6 @@
-﻿namespace Games.WordSearch
+﻿using System.Text.Json.Serialization;
+
+namespace Games.WordSearch
 {
     public class Coordinate
     {
@@ -12,6 +14,20 @@
         public List<Coordinate> Puzzle { get; set; }
         public List<string> Found { get; set; }
         public List<Coordinate> Solution { get; set; }
+
+        [JsonIgnore]
+        public Dictionary<(int, int), Coordinate> PuzzleIndex { get; private set; } = [];
+        [JsonIgnore]
+        public Dictionary<(int, int), Coordinate> SolutionIndex { get; private set; } = [];
+        [JsonIgnore]
+        public Dictionary<(int, int), Coordinate> BgColorIndex { get; private set; } = [];
+
+        public void BuildIndex()
+        {
+            PuzzleIndex = Puzzle.ToDictionary(o => (o.X, o.Y));
+            SolutionIndex = Solution.ToDictionary(o => (o.X, o.Y));
+            BgColorIndex = BgColor.ToDictionary(o => (o.X, o.Y));
+        }
 
         public bool HidePuzzle { get; set; } = false;
         public bool HideSolution { get; set; } = true;
@@ -114,6 +130,8 @@
             {
                 Finds[i] = "";
             }
+
+            BuildIndex();
         }
 
         public static void Increment(int fwd, ref int val)

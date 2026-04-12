@@ -25,18 +25,39 @@
 
         public void MoveCell(int index)
         {
-            var cell = Cells[index];
             var emptyCell = Cells.FirstOrDefault(x => x.Value == null);
             if (emptyCell == null)
                 return;
 
-            var emptyCellIndex = Cells.IndexOf(emptyCell);
-            // emptycell must be adjacent to cell
-            if (emptyCellIndex != index - 1 && emptyCellIndex != index + 1 && emptyCellIndex != index - 4 && emptyCellIndex != index + 4)
+            var emptyIndex = Cells.IndexOf(emptyCell);
+            if (emptyIndex == index)
                 return;
 
-            Cells[index] = emptyCell;
-            Cells[emptyCellIndex] = cell;            
+            int clickedRow = index / 4;
+            int clickedCol = index % 4;
+            int emptyRow = emptyIndex / 4;
+            int emptyCol = emptyIndex % 4;
+
+            if (clickedRow == emptyRow)
+            {
+                // Same row — slide all tiles between clicked and empty horizontally
+                int step = emptyIndex > index ? 1 : -1;
+                for (int i = emptyIndex; i != index; i -= step)
+                {
+                    Cells[i] = Cells[i - step];
+                }
+                Cells[index] = emptyCell;
+            }
+            else if (clickedCol == emptyCol)
+            {
+                // Same column — slide all tiles between clicked and empty vertically
+                int step = emptyIndex > index ? 4 : -4;
+                for (int i = emptyIndex; i != index; i -= step)
+                {
+                    Cells[i] = Cells[i - step];
+                }
+                Cells[index] = emptyCell;
+            }
         }
 
         // a function to check if the puzzle is solved

@@ -5,14 +5,26 @@ window.jsfunction = { focusNextElement: function () {
     if (document.activeElement && document.activeElement.form) {
         var focussable = Array.prototype.filter.call(document.activeElement.form.querySelectorAll(focussableElements),
         function (element) {
-            //check for visibility while always include the current activeElement 
+            //check for visibility while always include the current activeElement
             return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
         });
         var index = focussable.indexOf(document.activeElement);
         if(index > -1) {
            var nextElement = focussable[index + 1] || focussable[0];
            nextElement.focus();
-        }                    
+        }
     }
 }
 }
+
+window.wordSearchDrag = {
+    init: function (table) {
+        if (!table || table._dragInit) return;
+        table._dragInit = true;
+        table.addEventListener('pointerdown', function (e) {
+            if (e.target && typeof e.target.releasePointerCapture === 'function') {
+                try { e.target.releasePointerCapture(e.pointerId); } catch (err) { }
+            }
+        });
+    }
+};

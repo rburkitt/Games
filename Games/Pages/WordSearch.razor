@@ -5,8 +5,10 @@
 @using System.Collections.Generic;
 @using Games.WordSearch
 @using Games.Services
+@using Microsoft.AspNetCore.Components.Web
 
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject Microsoft.JSInterop.IJSRuntime JS
 
 @code {
     [Inject]
@@ -16,14 +18,23 @@
     private Search theGameW = new Search();
     private const string localStorageLabel = "wordSearch";
 
+    private ElementReference puzzleTable;
+    private bool isDragging = false;
+    private HashSet<(int, int)> draggedCells = new();
+
     protected override async Task OnInitializedAsync()
-    {        
+    {
         await Setup(false);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await localStorage.SetItemAsync("lastPage", "wordSearch");
+
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("wordSearchDrag.init", puzzleTable);
+        }
     }
 
     public async Task Setup(bool newGame = false)
@@ -53,10 +64,42 @@
         theGameW.HideSolution = !theGameW.HideSolution;
     }
 
-    public async Task Highlight(int r, int c)
+    public void ToggleCell(int r, int c)
     {
         var cell = theGameW.BgColorIndex[(r, c)];
         cell.Value = cell.Value == "00f" ? "#fd7" : "00f";
+    }
+
+    private void OnCellPointerDown(int r, int c)
+    {
+        isDragging = true;
+        draggedCells = new HashSet<(int, int)> { (r, c) };
+        ToggleCell(r, c);
+    }
+
+    private void OnCellPointerEnter(int r, int c, PointerEventArgs e)
+    {
+        if (!isDragging) return;
+
+        // Mouse released outside the table — cancel the drag.
+        if (e.PointerType == "mouse" && e.Buttons == 0)
+        {
+            isDragging = false;
+            draggedCells.Clear();
+            return;
+        }
+
+        if (draggedCells.Add((r, c)))
+        {
+            ToggleCell(r, c);
+        }
+    }
+
+    private async Task EndDrag()
+    {
+        if (!isDragging) return;
+        isDragging = false;
+        draggedCells.Clear();
         await localStorage.SetItemAsync(localStorageLabel, theGameW);
     }
 
@@ -97,7 +140,10 @@
             <button type="button" class="btn btn-link" style="padding: 0px;%; margin-bottom: 10px;" @onclick="@Solve">Solution &rArr;</button> 
         </div>
         <div class="col-10" hidden="@theGameW.HidePuzzle">
-            <table>
+            <table @ref="puzzleTable" class="puzzle-grid"
+                   @onpointerup="EndDrag"
+                   @onpointercancel="EndDrag"
+                   @onpointerleave="EndDrag">
                 @if (theGameW != null)
                 {
                     for (int r = 0; r < theGameW.Height; r++)//print puzzle
@@ -107,12 +153,14 @@
                             @for (int c = 0; c < theGameW.Width; c++)
                             {
                                 var local_c = c;
-                                <td style="width: 25px; text-align: center;background-color:@theGameW.BgColorIndex[(r, c)].Value" @onclick="(async e => await Highlight(local_r, local_c))">@theGameW.PuzzleIndex[(r, c)].Value</td>
+                                <td style="width: 25px; text-align: center;background-color:@theGameW.BgColorIndex[(r, c)].Value"
+                                    @onpointerdown="@(e => OnCellPointerDown(local_r, local_c))"
+                                    @onpointerenter="@(e => OnCellPointerEnter(local_r, local_c, e))">@theGameW.PuzzleIndex[(r, c)].Value</td>
                             }
                         </tr>
                     }
                 }
-            </table>                       
+            </table>
         </div>
         <div class="col-10" hidden="@theGameW.HideSolution">
             <table>
@@ -139,6 +187,16 @@
 </div>
 
 <style>
+    .puzzle-grid {
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .puzzle-grid td {
+        cursor: pointer;
+    }
+
     .setup {
         color: black;
         float: right;
